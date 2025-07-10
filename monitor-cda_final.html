@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CDA Final - BFLOWS S.R.L. | SCAN</title>
+    <!-- Librerie Esterne -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="../css/print.css" rel="stylesheet" media="print"> <!-- Adjusted path if needed -->
+
+    <!-- Stili Incorporati (CSS V9/V12/V16 Corretto) -->
+    <style>
+        /* Copia/Incolla tutti gli stili CSS da monitor-cda_final.html qui */
+        .actions-card ol.action-list { padding-left: 0; list-style: none; }
+        .actions-card li { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;}
+        .actions-card li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        .actions-card li strong { color: var(--primary); display: block; margin-bottom: 0.2rem;} /* Titolo azione */
+        .actions-card .priority-badge { font-size: 0.75rem; padding: 3px 8px; flex-shrink: 0; margin-left: 1rem;}
+         /* Stili V15 mantenuti e aggiustamenti */
+        .irp-visual-section { background: linear-gradient(135deg, var(--white) 0%, #f0f4f8 100%); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow); margin-bottom: 2.5rem; border: 1px solid var(--card-border); }
+        .irp-main-title { color: var(--primary); font-weight: 700; margin-bottom: 1.5rem; border-bottom: 2px solid var(--secondary); padding-bottom: 0.8rem; }
+        .irp-gradient-bar-container { margin-bottom: 0.5rem; }
+        .irp-gradient-bar { height: 20px; border-radius: 10px; overflow: hidden; position: relative; background: linear-gradient(to right, #d62246 0%, #d98c00 35%, #ffc107 55%, #4CAF50 80%, #191970 100%); border: 1px solid #bdc3c7; }
+        .irp-marker { position: absolute; top: -5px; bottom: -5px; width: 6px; background-color: #ffffff; border: 2px solid #343a40; transform: translateX(-50%); box-shadow: 0 0 8px rgba(0,0,0,0.5); z-index: 2; border-radius: 3px; }
+        .irp-marker::after { content: ''; position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 8px solid #343a40; }
+        .irp-scale-labels { font-size: 0.8rem; color: #6c757d; font-weight: 500; padding: 0 5px;}
+        .irp-score-circle { width: 140px; height: 140px; border-radius: 50%; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 0.5rem auto; box-shadow: 0 8px 20px rgba(0,0,0,0.25); background: var(--warning); border: 6px solid rgba(255, 255, 255, 0.5); }
+        .irp-score-circle.risk-low { background: radial-gradient(circle, #6bc571, #4CAF50); }
+        .irp-score-circle.risk-medium { background: radial-gradient(circle, #ffd54f, #FFC107); }
+        .irp-score-circle.risk-high { background: radial-gradient(circle, #f6685e, #F44336); }
+        .irp-score-value { font-size: 3.5rem; font-weight: 700; line-height: 1; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);}
+        .irp-score-max { font-size: 0.9rem; opacity: 0.8; display: block; line-height: 1;}
+        .irp-category-text { font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem; text-align: center; }
+        .irp-category-text .status-badge { font-size: 0.85rem; vertical-align: middle; margin-left: 8px;}
+
+        :root {
+            --primary: #191970; --secondary: #4a69bd; --success: #4CAF50;
+            --warning: #FFC107; --danger: #F44336; --info: #0dcaf0;
+            --light: #f8f9fa; --dark: #343a40; --white: #ffffff;
+            --text-primary: #212529; --text-secondary: #6c757d;
+            --card-bg: var(--white); --card-border: #dee2e6;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        html, body { height: 100%; overflow-x: hidden; font-family: 'Titillium Web', sans-serif; background-color: #f4f8fb; }
+        body { display: flex; }
+        .sidebar { width: 250px; background-color: var(--primary); color: #e0e0e0; position: fixed; top: 0; bottom: 0; left: 0; z-index: 1031; display: flex; flex-direction: column; box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1); transition: width 0.3s ease; overflow-y: auto; }
+        .main-wrapper { margin-left: 250px; width: calc(100% - 250px); display: flex; flex-direction: column; min-height: 100vh; position: relative; padding-top: 70px; /* Spazio per header */ }
+        .dashboard-header { background-color: var(--white); padding: 15px 30px; border-bottom: 1px solid var(--card-border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-height: 70px; display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 250px; right: 0; z-index: 1030; } /* Adjusted left alignment for title */
+        .dashboard-container { padding: 30px; flex-grow: 1; width: 100%; }
+        .footer { background-color: var(--primary); color: rgba(255, 255, 255, 0.7); padding: 15px 30px; font-size: 0.85rem; margin-top: auto; flex-shrink: 0; width: 100%; }
+        .footer img { max-height: 20px; width: auto; filter: brightness(0) invert(1); opacity: 0.8; vertical-align: middle;}
+        .sidebar-header { padding: 10px 20px; margin-bottom: 20px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .sidebar-header img { max-height: 40px; } .sidebar-header h5 { color: var(--white); margin-top: 10px; font-size: 1.1rem; font-weight: 600; }
+        .sidebar-nav { list-style: none; padding: 0; } .sidebar-nav .nav-item { margin: 0; }
+        .sidebar-nav .nav-link { color: #e0e0e0; padding: 12px 20px; display: flex; align-items: center; font-size: 0.95rem; font-weight: 500; border-left: 4px solid transparent; transition: all 0.2s ease; }
+        .sidebar-nav .nav-link:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--white); border-left-color: var(--warning); }
+        .sidebar-nav .nav-link.active { background-color: rgba(255, 255, 255, 0.1); color: var(--white); font-weight: 600; border-left-color: var(--white); }
+        .sidebar-nav .nav-link i { margin-right: 15px; width: 20px; text-align: center; font-size: 1rem; }
+        .sidebar-nav .nav-title { padding: 10px 20px; font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 15px; }
+        .sidebar-footer { margin-top: auto; padding: 15px 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.9rem; text-align: left; }
+        .section-title { color: var(--primary); font-weight: 600; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--secondary); font-size: 1.75rem; display: flex; align-items: center; } .section-title i { margin-right: 10px; }
+        .dashboard-card { background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); transition: all 0.3s ease; height: 100%; }
+        .dashboard-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.1); transform: translateY(-3px); }
+        .card-title-small { font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .table { border: 1px solid var(--card-border); margin-bottom: 1rem; } .table thead th { background-color: var(--light); color: var(--primary); font-weight: 600; border-bottom: 2px solid var(--primary); font-size: 0.9rem; white-space: nowrap; } .table-hover tbody tr:hover { background-color: #eef2f7; } .table td, .table th { vertical-align: middle; padding: 0.6rem 0.75rem; font-size: 0.9rem;} .value-highlight { font-weight: 600; color: var(--primary); } .text-end { text-align: right !important;} .text-success { color: var(--success) !important; } .text-danger { color: var(--danger) !important; } .text-warning { color: var(--warning) !important; } .text-secondary { color: var(--text-secondary) !important; }
+        .alert-box { padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid; } .alert-box h5 { margin-bottom: 10px; font-size: 1.1rem; font-weight: 600;} .alert-box ul { padding-left: 20px; margin-bottom: 0; font-size: 0.9rem;} .alert-box.alert-success { background-color: #d1e7dd; border-color: #a3cfbb; color: #0a3622; } .alert-box.alert-warning { background-color: #fff3cd; border-color: #ffda6a; color: #664d03; } .alert-box.alert-danger { background-color: #f8d7da; border-color: #f1aeb5; color: #58151c; } .alert-box.alert-info { background-color: #cff4fc; border-color: #9eeaf9; color: #055160; }
+        .status-badge { font-size: .75em; font-weight: 700; line-height: 1; padding: .35em .65em; border-radius: .375rem; color: white; display: inline-block; } .status-badge.bg-success { background-color: var(--success) !important; } .status-badge.bg-warning { background-color: var(--warning) !important; color: var(--dark) !important;} .status-badge.bg-danger { background-color: var(--danger) !important; } .status-badge.bg-info { background-color: var(--info) !important; color: var(--dark) !important;}
+        .chart-container-cda { height: 350px; /* Adjusted height */ margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 8px; border: 1px solid var(--card-border); box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; }
+        .icon-circle { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; color: white; margin-right: 12px; font-size: 0.9rem; flex-shrink: 0; }
+        .bg-icon-success { background-color: var(--success); } .bg-icon-warning { background-color: var(--warning); } .bg-icon-danger { background-color: var(--danger); } .bg-icon-info { background-color: #4f6d7a; } .bg-icon-primary { background-color: var(--primary); } .bg-icon-secondary { background-color: var(--secondary); }
+        .kpi-card-v4 { display: flex; align-items: center; padding: 1rem; background-color: var(--white); border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 1.5rem; border: 1px solid var(--card-border); height: 100%;} .kpi-card-v4 .kpi-content { margin-left: 0; flex-grow: 1;} .kpi-card-v4 .kpi-header { display: flex; align-items: center; margin-bottom: 5px;} .kpi-card-v4 .kpi-title { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0; line-height: 1.2;} .kpi-card-v4 .kpi-value { font-size: 1.7rem; font-weight: 700; color: var(--dark); line-height: 1.2; margin-bottom: 3px;} .kpi-card-v4 .kpi-trend { font-size: 0.8rem; font-weight: 600; margin-top: 0px;} .kpi-card-v4 .kpi-trend .fas { margin-right: 4px; } .kpi-card-v4 .trend-up { color: var(--success); } .kpi-card-v4 .trend-down { color: var(--danger); } .kpi-card-v4 .trend-neutral { color: var(--text-secondary); }
+        .accordion-item { background-color: var(--white); border: 1px solid var(--card-border); border-radius: 8px !important; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);} .accordion-header { }
+        .accordion-button { font-weight: 600; font-size: 1.1rem; color: var(--primary); background-color: #f8f9fa; box-shadow: none !important; border-radius: 7px 7px 0 0 !important;} /* Header Accordion leggermente colorato */
+        .accordion-button:not(.collapsed) { color: var(--white); background-color: var(--secondary); }
+        .accordion-button:focus { box-shadow: none; }
+        .accordion-button::after { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23191970'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); transition: transform .2s ease-in-out;}
+        .accordion-button:not(.collapsed)::after { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); transform: rotate(-180deg); }
+        .accordion-body { padding: 1.5rem; font-size: 0.9rem; } .accordion-body h6 { font-weight: 600; color: var(--secondary); margin-top: 1rem; margin-bottom: 0.5rem; } .accordion-body .table { margin-top: 1rem; }
+        /* Alert Cards V17 */
+        .alert-card { display: flex; align-items: flex-start; padding: 1rem; border-radius: 8px; border: 1px solid; background-color: #f8f9fa; margin-bottom: 1rem; box-shadow: var(--shadow); }
+        .alert-card .alert-icon { font-size: 1.8rem; margin-right: 1rem; flex-shrink: 0; width: 40px; text-align: center; }
+        .alert-card h5 { font-weight: 600; margin-bottom: 0.3rem; font-size: 1.1rem; }
+        .alert-card p { font-size: 0.9rem; margin-bottom: 0; line-height: 1.5; }
+        .alert-card.alert-danger { border-color: #f1aeb5; color: #58151c; background-color: #f8d7da; } .alert-card.alert-danger .alert-icon { color: #a94442; }
+        .alert-card.alert-warning { border-color: #ffda6a; color: #664d03; background-color: #fff3cd; } .alert-card.alert-warning .alert-icon { color: #8a6d3b; }
+        .alert-card.alert-info { border-color: #9eeaf9; color: #055160; background-color: #cff4fc; } .alert-card.alert-info .alert-icon { color: #31708f; }
+        .alert-card.alert-success { border-color: #a3cfbb; color: #0a3622; background-color: #d1e7dd; } .alert-card.alert-success .alert-icon { color: #3c763d; }
+        /* Executive Summary Card */
+        .executive-summary-card { background-color: #f0f4f8; border-left: 5px solid var(--primary); border-radius: 8px; box-shadow: var(--shadow); }
+        .executive-summary-card .card-body { padding: 1.5rem; }
+        /* Card titolo Modern */
+        .card-title-modern { font-size: 1rem; font-weight: 600; color: var(--primary); margin-bottom: 1rem; text-align: center; }
+        /* Chart Card per CDA */
+        .chart-card { padding-top: 1rem; /* Spazio per titolo */ }
+
+        @media (max-width: 991.98px) { .sidebar { width: 0; border: none; box-shadow: none;} .main-wrapper { margin-left: 0; width: 100%; padding-top: 56px; } .dashboard-header { left: 0; width: 100%; min-height: 56px; padding: 5px 15px;} .header-title h5 { font-size: 1rem;} .header-title p { font-size: 0.75rem;} .dashboard-container { padding: 15px;} .footer { padding: 10px 15px;} }
+        /* Stampa */
+         @media print { body { display: block; } .main-wrapper { margin-left: 0; width: 100%; padding-top: 0; } .no-print { display: none !important; } .report-section { page-break-inside: avoid; } /* Altri stili print.css */ }
+    </style>
+</head>
+<body>
+
+   <!-- Sidebar -->
+    <aside class="sidebar no-print">
+         <div class="sidebar-header">   <img src="assets/img/logo_scan.png" alt="FREM Logo" style="max-height: 40px;">
+ <h5>BFLOWS S.R.L.</h5> </div> <!-- Changed Name -->
+         <ul class="sidebar-nav flex-grow-1">
+             <li class="nav-item"> <a class="nav-link active" href="monitor-cda_final.html"> <i class="fas fa-tachometer-alt fa-fw"></i> Overview CDA </a> </li>
+             <!-- Link Interni alla Pagina -->
+             <li class="nav-item"> <a class="nav-link" href="#kpi-section"> <i class="fas fa-key fa-fw"></i> KPI Principali </a> </li>
+             <li class="nav-item"> <a class="nav-link" href="#charts-section"> <i class="fas fa-chart-pie fa-fw"></i> Grafici Chiave </a> </li>
+             <li class="nav-item"> <a class="nav-link" href="#alerts-section"> <i class="fas fa-bell fa-fw"></i> Alert e Rischi </a> </li>
+             <li class="nav-item"> <a class="nav-link" href="#details-accordion"> <i class="fas fa-layer-group fa-fw"></i> Approfondimenti </a> </li>
+             <li class="nav-item"> <a class="nav-link" href="#actions-summary"> <i class="fas fa-tasks fa-fw"></i> Azioni Prioritarie </a> </li>
+             <li class="nav-item"> <a class="nav-link" href="index.html"> <i class="fas fa-home fa-fw"></i> Torna alla home </a> </li>
+
+
+         </ul>
+         <div class="sidebar-footer"> <small>SCAN360 © <span id="currentYearSidebar"></span> Kitzanos</small> </div>
+     </aside>
+
+    <!-- Contenuto Principale Wrapper -->
+    <div class="main-wrapper">
+        <!-- Header Orizzontale -->
+        <header class="dashboard-header no-print">
+            <div class="header-title">
+                 <h5 class="mb-0">Dashboard Esecutiva CDA</h5>
+                 <p class="mb-0">BFLOWS S.R.L. | <span class="report-date">31 Dicembre 2024</span></p> <!-- Changed Name -->
+            </div>
+            
+        </header>
+        <div class="container d-none d-print-block mt-4 mb-4">
+            <h1 class="text-center mb-0"><span class="company-name">BFLOWS S.R.L.</span></h1> <!-- Changed Name -->
+            <p class="text-center mb-0">Dashboard Esecutiva CDA | <span class="report-date">31 Dicembre 2024</span></p>
+            <hr>
+        </div>
+
+        <!-- Area Contenuto Dashboard CDA -->
+        <div class="dashboard-container">
+
+            <!-- Executive Summary Card (Updated for BFLOWS) -->
+            <div class="card executive-summary-card mb-4 report-section">
+                 <div class="card-body">
+                     <div class="row align-items-center">
+                         <div class="col-lg-8"> <!-- Colonna più larga per testo -->
+                             <h4 class="card-title mb-3" style="color: var(--primary);"><i class="fas fa-info-circle me-2"></i>Executive Summary</h4>
+                             <!-- !!! TESTO AGGIORNATO PER BFLOWS !!! -->
+                             <p class="mb-2">L'analisi finanziaria di BFLOWS S.R.L. evidenzia un <strong>profilo di rischio alto (IRP 57,7)</strong>, caratterizzato da significative criticità operative nonostante la <strong>forte crescita dei ricavi</strong> (+62,36%) e la categorizzazione "STAR" da parte del sistema Leanus. La <strong>perdita operativa strutturale</strong> (EBITDA -22,41%) e il mancato raggiungimento della marginalità positiva</strong> costituiscono i principali fattori di attenzione.</p>
+                             <p class="mb-0 text-warnig">Le <strong>aree di criticità</strong> includono <strong>EBITDA negativo</strong> (-€71.772), <strong>cash flow operativo negativo</strong> (-€86.913), <strong>tempi di incasso eccessivi</strong> (343 giorni) e <strong>costi fissi elevati</strong> (72,7% dei ricavi). Il patrimonio netto solido (€1.366.106) e la bassa leva finanziaria (D/E 0,40) rappresentano elementi di stabilità.</p>
+                             <!-- Fine Testo Aggiornato -->
+                         </div>
+                         <div class="col-lg-4 text-center mt-3 mt-lg-0"> <!-- Colonna più stretta per IRP -->
+                              <h6 class="card-title-small mb-1">Indice Rischio (IRP)</h6>
+                              <!-- !!! CERCHIO IRP AGGIORNATO PER BFLOWS !!! -->
+                              <div class="irp-score-circle risk-medium" style="width: 110px; height: 110px; border-width: 4px;"> <!-- Dimensione leggermente ridotta -->
+                                 <span class="irp-score-value" style="font-size: 2.8rem;">57,7</span> <!-- Valore dentro -->
+                                 <span class="irp-score-max" style="font-size: 0.7rem;">/ 100</span>
+                             </div>
+                             <div class="irp-category-text text-warning mt-1" style="font-size: 1rem;"> <!-- Categoria sotto -->
+                                 Rischio Medio <span class="status-badge bg-warning">C</span> <!-- Changed badge -->
+                             </div>
+                             <a href="../report/irp_dettagli.html" target="_blank" class="btn btn-link btn-sm p-0 mt-1 small">Dettaglio IRP</a> <!-- Changed link and Adjusted Path-->
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- Sezione KPI Principali V4 (8 KPI - Updated for BFLOWS) -->
+             <section id="kpi-section" class="report-section">
+                  <h4 class="section-title small"><i class="fas fa-key me-2"></i>INDICATORI CHIAVE</h4>
+                   <div class="row gy-4">
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-success"><i class="fas fa-euro-sign"></i></span> <div class="kpi-content"> <div class="kpi-title">Ricavi</div> <div class="kpi-value">€ 320K</div> <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +62,36% YoY</div> </div> </div> </div> <!-- Trend Up -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-danger"><i class="fas fa-percent"></i></span> <div class="kpi-content"> <div class="kpi-title">EBITDA Margin</div> <div class="kpi-value">-22,41%</div> <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +19,59 p.p.</div> </div> </div> </div> <!-- Negative Value, Trend Up -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-danger"><i class="fas fa-chart-line"></i></span> <div class="kpi-content"> <div class="kpi-title">EBITDA</div> <div class="kpi-value">-€ 71,8K</div> <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +13,40% YoY</div> </div> </div> </div> <!-- Negative Value, Trend Up -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-danger"><i class="fas fa-coins"></i></span> <div class="kpi-content"> <div class="kpi-title">Utile Netto</div> <div class="kpi-value">-€ 48,1K</div> <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> +48,13% YoY</div> </div> </div> </div> <!-- Negative Value, Trend Up -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-danger"><i class="fas fa-balance-scale-right"></i></span> <div class="kpi-content"> <div class="kpi-title">PFN / EBITDA</div> <div class="kpi-value">NOK</div> <div class="kpi-trend trend-neutral text-danger"><i class="fas fa-times"></i> Critico</div> </div> </div> </div> <!-- Not calculable, EBITDA negative -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-success"><i class="fas fa-landmark"></i></span> <div class="kpi-content"> <div class="kpi-title">Leva (D/E)</div> <div class="kpi-value">0,40x</div> <div class="kpi-trend trend-neutral text-success"><i class="fas fa-check"></i> Ottimo</div> </div> </div> </div> <!-- Excellent Value, Trend Improved -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-danger"><i class="fas fa-hourglass-half"></i></span> <div class="kpi-content"> <div class="kpi-title">DSO (Clienti)</div> <div class="kpi-value">343 gg</div> <div class="kpi-trend trend-up text-danger"><i class="fas fa-arrow-up"></i> +9,94%</div> </div> </div> </div> <!-- Critical Value, Trend Worsened -->
+                      <div class="col-lg-3 col-md-6"> <div class="kpi-card-v4"> <span class="icon-circle bg-icon-danger"><i class="fas fa-water"></i></span> <div class="kpi-content"> <div class="kpi-title">Cash Flow Operativo</div> <div class="kpi-value">-€ 86,9K</div> <div class="kpi-trend trend-neutral">-27,14% Ricavi</div> </div> </div> </div> <!-- Negative Value -->
+                 </div>
+             </section>
+
+             <!-- Sezione Alert Principali (Updated for BFLOWS) -->
+             <section id="alerts-section" class="report-section">
+                 <h4 class="section-title small"><i class="fas fa-bell me-2 text-danger"></i>ALERT PRINCIPALI</h4>
+                 <div class="row">
+                     <div class="col-lg-6 mb-4">
+                         <div class="alert-card alert-danger"> <!-- Changed to Danger -->
+                             <i class="fas fa-chart-line alert-icon"></i> <!-- Changed icon -->
+                             <div>
+                                 <h5>EBITDA Negativo: -22,41% <span class="badge bg-danger ms-2">Critico</span></h5> <!-- Changed Alert -->
+                                 <p>Perdita operativa strutturale nonostante la forte crescita dei ricavi. Necessaria revisione urgente della struttura dei costi e del modello di business.</p> <!-- Changed Text -->
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-lg-6 mb-4">
+                         <div class="alert-card alert-danger">
+                             <i class="fas fa-hourglass-half alert-icon"></i> <!-- Changed icon -->
+                             <div>
+                                 <h5>DSO: 343 giorni <span class="badge bg-danger ms-2">Critico</span></h5> <!-- Changed Alert -->
+                                 <p>Tempi di incasso eccessivamente lunghi che immobilizzano circa €264.922 di liquidità (82,7% del fatturato). Necessaria revisione urgente delle politiche di credito.</p> <!-- Changed Text -->
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-lg-6 mb-4"> <!-- Added Alert -->
+                         <div class="alert-card alert-danger">
+                              <i class="fas fa-water alert-icon"></i>
+                              <div>
+                                   <h5>Cash Flow Operativo: -27,14% <span class="badge bg-danger ms-2">Critico</span></h5>
+                                   <p>Incapacità di generare cassa dalla gestione operativa (-€86.913). Necessario intervento immediato per evitare tensioni di liquidità.</p>
+                              </div>
+                         </div>
+                     </div>
+                      <div class="col-lg-6 mb-4"> <!-- Added Alert -->
+                          <div class="alert-card alert-danger">
+                               <i class="fas fa-balance-scale-right alert-icon"></i>
+                               <div>
+                                   <h5>Costi Fissi: 72,7% dei ricavi <span class="badge bg-danger ms-2">Critico</span></h5>
+                                   <p>Struttura dei costi rigida e insostenibile (€232.775). Break-even point a €574.102, +79,26% rispetto ai ricavi attuali.</p>
+                               </div>
+                          </div>
+                      </div>
+                 </div>
+             </section>
+
+             <!-- Sezione Grafici Chiave CDA (Updated for BFLOWS) -->
+             <section id="charts-section" class="report-section">
+                   <h4 class="section-title small"><i class="fas fa-chart-pie me-2"></i>GRAFICI CHIAVE</h4>
+                   <div class="row">
+                       <div class="col-lg-6 mb-4">
+                            <div class="dashboard-card chart-card">
+                                <h6 class="card-title-modern">Trend Economico (Ricavi/EBITDA)</h6>
+                                <div class="chart-container-cda" style="height: 350px;">
+                                     <canvas id="trendRicaviEbitdaChart"></canvas>
+                                 </div>
+                            </div>
+                       </div>
+                       <div class="col-lg-6 mb-4">
+                            <div class="dashboard-card chart-card">
+                                <h6 class="card-title-modern">Sostenibilità Debito (PFN/EBITDA)</h6>
+                                <div class="chart-container-cda" style="height: 350px;">
+                                      <canvas id="trendPfnEbitdaChart"></canvas>
+                                 </div>
+                            </div>
+                       </div>
+                        <!-- Aggiungere Grafico Ciclo Circolante -->
+                         <div class="col-lg-6 mb-4">
+                            <div class="dashboard-card chart-card">
+                                <h6 class="card-title-modern">Evoluzione Ciclo Circolante (Giorni)</h6>
+                                <div class="chart-container-cda" style="height: 350px;">
+                                     <canvas id="trendWorkingCapitalChart"></canvas> <!-- New Canvas ID -->
+                                </div>
+                            </div>
+                       </div>
+                        <div class="col-lg-6 mb-4">
+                           <div class="dashboard-card chart-card">
+                               <h6 class="card-title-modern">Generazione Cassa Operativa (% Ricavi)</h6>
+                               <div class="chart-container-cda" style="height: 350px;">
+                                    <canvas id="trendCashFlowOpChart"></canvas> <!-- New Canvas ID -->
+                               </div>
+                           </div>
+                      </div>
+                   </div>
+              </section>
+
+             <!-- SEZIONI DI DETTAGLIO CON ACCORDION (Updated for BFLOWS) -->
+             <h2 class="section-title mt-5" id="details-accordion"><i class="fas fa-layer-group me-2"></i>Approfondimenti Dettagliati</h2>
+             <div class="accordion report-section" id="cdaDetailsAccordion">
+
+                 <!-- 1. Dettaglio Performance Economica -->
+                 <div class="accordion-item">
+                     <h2 class="accordion-header" id="headingEconomic"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEconomic" aria-expanded="false" aria-controls="collapseEconomic"> <i class="fas fa-chart-line me-2"></i> Performance Economica<span class="badge bg-danger ms-2">Critica</span> </button> </h2> <!-- Rating downgraded -->
+                     <div id="collapseEconomic" class="accordion-collapse collapse" aria-labelledby="headingEconomic" data-bs-parent="#cdaDetailsAccordion">
+                         <div class="accordion-body">
+                              <!-- Updated content for BFLOWS from PARTE2 -->
+                              <h6>Principali indicatori economici</h6>
+                              <div class="table-responsive mb-3"><table class="table table-sm table-striped">
+                                  <tbody><tr><td>Ricavi</td><td class="value-highlight">€320.260</td><td><i class="fas fa-arrow-up text-success"></i> +62,36%</td></tr><tr><td>EBITDA</td><td class="value-highlight">-€71.772 (-22,41%)</td><td><i class="fas fa-arrow-up text-success"></i> +13,40%</td></tr><tr><td>EBIT</td><td class="value-highlight">-€127.613 (-39,85%)</td><td><i class="fas fa-arrow-down text-danger"></i> -36,25%</td></tr><tr><td>Utile Netto</td><td class="value-highlight">-€48.105 (-15,02%)</td><td><i class="fas fa-arrow-up text-success"></i> +48,13%</td></tr><tr><td>Margine di Contribuzione</td><td class="value-highlight">50,27%</td><td><i class="fas fa-arrow-up text-success"></i> +33,97 p.p.</td></tr><tr><td>Break-Even Point</td><td class="value-highlight">€574.102</td><td><span class="badge bg-danger">-79,26% margine</span></td></tr></tbody>
+                              </table></div>
+                              <h6>Indici di redditività</h6>
+                              <div class="table-responsive mb-3"><table class="table table-sm table-striped">
+                                   <tbody><tr><td>ROE</td><td class="value-highlight">-3,52%</td><td><i class="fas fa-arrow-up text-success"></i> +6,21 p.p.</td><td><span class="badge bg-danger">Critico</span> (<0%)</td></tr><tr><td>ROI</td><td class="value-highlight">-6,87%</td><td><i class="fas fa-arrow-down text-danger"></i> -0,39 p.p.</td><td><span class="badge bg-danger">Critico</span> (<0%)</td></tr><tr><td>ROS</td><td class="value-highlight">-39,85%</td><td><i class="fas fa-arrow-up text-success"></i> +7,65 p.p.</td><td><span class="badge bg-danger">Critico</span> (<0%)</td></tr><tr><td>Turnover Capitale</td><td class="value-highlight">0,17x</td><td><i class="fas fa-arrow-down text-danger"></i> N/D</td><td><span class="badge bg-danger">Critico</span> (<0,8x)</td></tr><tr><td>EBIT/Oneri Fin.</td><td class="value-highlight">-11,29x</td><td><i class="fas fa-arrow-down text-danger"></i> N/D</td><td><span class="badge bg-danger">Critico</span> (<0x)</td></tr><tr><td>Costo Medio Debito</td><td class="value-highlight">1,90%</td><td><i class="fas fa-arrow-down text-success"></i> N/D</td><td><span class="badge bg-success">Ottimo</span> (<5%)</td></tr></tbody>
+                              </table></div>
+                              <h6 class="mt-3">Evoluzione Conto Economico (Dettaglio)</h6>
+                              <div class="table-responsive"><table class="table table-sm table-striped table-hover">
+                                  <thead class="table-light"><tr><th>Voce</th><th class="text-end">2022 (€)</th><th class="text-end">2023 (€)</th><th class="text-end">2024 (€)</th><th class="text-end">Var % 23-24</th></tr></thead>
+                                  <tbody><tr><td>Ricavi</td><td class="text-end">21.000</td><td class="text-end">197.250</td><td class="text-end">320.260</td><td class="text-end text-success">+62,36%</td></tr><tr><td>Acquisti e consumi</td><td class="text-end">-8</td><td class="text-end">-209</td><td class="text-end">-785</td><td class="text-end text-danger">+275,60%</td></tr><tr><td>Costi variabili prod.</td><td class="text-end">-96.159</td><td class="text-end">-164.866</td><td class="text-end">-158.472</td><td class="text-end text-success">-3,88%</td></tr><tr><td>Margine di Contribuzione</td><td class="text-end">-75.151</td><td class="text-end">32.175</td><td class="text-end">161.003</td><td class="text-end text-success">+400,40%</td></tr><tr><td>Costi fissi</td><td class="text-end">-131.866</td><td class="text-end">-115.048</td><td class="text-end">-232.775</td><td class="text-end text-danger">+102,27%</td></tr><tr class="table-danger fw-bold"><td>EBITDA</td><td class="text-end">-207.017</td><td class="text-end">-82.873</td><td class="text-end">-71.772</td><td class="text-end text-success">+13,40%</td></tr><tr><td>Amm.ti/Svalut.</td><td class="text-end">-7.775</td><td class="text-end">-10.793</td><td class="text-end">-55.841</td><td class="text-end text-danger">+417,32%</td></tr><tr><td>EBIT</td><td class="text-end">-214.792</td><td class="text-end">-93.666</td><td class="text-end">-127.613</td><td class="text-end text-danger">-36,25%</td></tr><tr><td>Gest. Finanz.</td><td class="text-end">-12.711</td><td class="text-end">-9.603</td><td class="text-end">-11.293</td><td class="text-end text-danger">+17,60%</td></tr><tr><td>EBT</td><td class="text-end">-220.822</td><td class="text-end">-119.308</td><td class="text-end">-61.928</td><td class="text-end text-success">+48,09%</td></tr><tr><td>Imposte</td><td class="text-end">19.677</td><td class="text-end">26.584</td><td class="text-end">13.823</td><td class="text-end text-danger">-48,00%</td></tr><tr class="table-danger fw-bold"><td>Utile Netto</td><td class="text-end">-201.145</td><td class="text-end">-92.724</td><td class="text-end">-48.105</td><td class="text-end text-success">+48,13%</td></tr></tbody>
+                              </table></div>
+                              <div class="row mt-3"> <div class="col-md-6"><div class="alert alert-success small p-2"><h6>Punti di forza:</h6><ul><li>Forte crescita ricavi (+62,36%)</li><li>Miglioramento MdC (50,27%)</li><li>Riduzione perdita netta</li><li>Costo debito contenuto (1,90%)</li></ul></div></div> <div class="col-md-6"><div class="alert alert-warning small p-2"><h6>Aree di miglioramento:</h6><ul><li>EBITDA e EBIT negativi</li><li>Costi fissi eccessivi (+102,27%)</li><li>Ammortamenti in forte aumento</li><li>Turnover capitale critico (0,17x)</li></ul></div></div></div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- Dettaglio Struttura Patrimoniale -->
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingAssets"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAssets" aria-expanded="false" aria-controls="collapseAssets"> <i class="fas fa-landmark me-2"></i> Struttura Patrimoniale <span class="badge bg-success ms-2">Buona</span></button> </h2> <!-- Rating maintained -->
+                      <div id="collapseAssets" class="accordion-collapse collapse" aria-labelledby="headingAssets" data-bs-parent="#cdaDetailsAccordion">
+                          <div class="accordion-body">
+                               <!-- Updated content for BFLOWS from PARTE3 -->
+                               <div class="row mb-4">
+                                  <div class="col-md-6"><h6>Stato Patrimoniale Sintetico (Impieghi)</h6><table class="table table-sm table-striped"><tbody><tr><td>Attivo Fisso Netto</td><td class="value-highlight">€1.484.241</td><td><i class="fas fa-arrow-up text-danger"></i> +27,2%</td></tr><tr><td>- Imm. immateriali</td><td>€1.478.014</td><td><i class="fas fa-arrow-up text-danger"></i> +27,3%</td></tr><tr><td>- Imm. materiali</td><td>€4.227</td><td><i class="fas fa-arrow-up text-danger"></i> +0,3%</td></tr><tr><td>- Imm. finanziarie</td><td>€2.000</td><td><i class="fas fa-arrow-up text-danger"></i> +0,1%</td></tr><tr><td>Capitale Circolante</td><td class="value-highlight">€141.237</td><td><i class="fas fa-arrow-up text-danger"></i> +549,5%</td></tr><tr><td>- Crediti comm.</td><td>€304.300</td><td><i class="fas fa-arrow-up text-danger"></i> +78,2%</td></tr><tr><td>- Debiti comm.</td><td>-€163.063</td><td><i class="fas fa-arrow-down text-success"></i> -19,4%</td></tr><tr class="table-primary fw-bold"><td>Capitale Investito Netto</td><td class="value-highlight">€1.856.275</td><td><i class="fas fa-arrow-up text-danger"></i> +12,1%</td></tr></tbody></table></div> <!-- Adjusted CIN calculation logic if needed based on source definition -->
+                                  <div class="col-md-6"><h6>Struttura delle Fonti</h6><table class="table table-sm table-striped"><tbody><tr><td>Patrimonio Netto</td><td class="value-highlight">€1.366.106</td><td><i class="fas fa-arrow-up text-success"></i> +43,4%</td></tr><tr><td>PFN</td><td class="value-highlight">€490.169</td><td><i class="fas fa-arrow-down text-success"></i> -0,4%</td></tr><tr><td>- Debiti MLT</td><td>€507.872</td><td><i class="fas fa-arrow-down text-success"></i> -21,5%</td></tr><tr><td>- Debiti BT</td><td>€35.773</td><td><i class="fas fa-arrow-up text-danger"></i> +12.676%</td></tr><tr><td>- Liquidità</td><td>-€53.476</td><td><i class="fas fa-arrow-down text-danger"></i> -65,5%</td></tr><tr class="table-primary fw-bold"><td>Totale Fonti</td><td class="value-highlight">€1.856.275</td><td><i class="fas fa-arrow-up text-danger"></i> +12,1%</td></tr></tbody></table></div> <!-- Adjusted Total Fonti if needed -->
+                               </div>
+                               <h6>Indici di Solidità Patrimoniale</h6>
+                               <div class="table-responsive"><table class="table table-sm table-striped table-hover">
+                                   <thead class="table-light"><tr><th>Indice</th><th>Formula</th><th class="text-end">2022</th><th class="text-end">2023</th><th class="text-end">2024</th><th>Valutazione</th></tr></thead>
+                                   <tbody><tr><td>Autonomia Fin.</td><td>PN / Tot Passivo</td><td class="text-end">21,7%</td><td class="text-end">49,0%</td><td class="text-end">62,6%</td><td><span class="status-badge bg-success">Ottimo</span></td></tr><tr><td>Cop. Immobilizzazioni</td><td>PN / Immobilizzazioni</td><td class="text-end">0,31</td><td class="text-end">0,82</td><td class="text-end">0,92</td><td><span class="status-badge bg-warning text-dark">Adeguato</span></td></tr><tr><td>Indice Struttura Secondario</td><td>(PN+MLT)/Immob.</td><td class="text-end">1,16</td><td class="text-end">1,37</td><td class="text-end">1,27</td><td><span class="status-badge bg-success">Buono</span></td></tr><tr><td>Leva (D/E)</td><td>Debiti Fin. / PN</td><td class="text-end">2,78</td><td class="text-end">0,68</td><td class="text-end">0,40</td><td><span class="status-badge bg-success">Ottimo</span></td></tr><tr><td>PFN/EBITDA</td><td>PFN / EBITDA</td><td class="text-end">NOK</td><td class="text-end">NOK</td><td class="text-end">NOK</td><td><span class="status-badge bg-danger">Critico</span></td></tr><tr><td>PFN/PN</td><td>PFN / PN</td><td class="text-end">2,71</td><td class="text-end">0,52</td><td class="text-end">0,36</td><td><span class="status-badge bg-success">Ottimo</span></td></tr></tbody>
+                               </table></div>
+                               <div class="row mt-3"> <div class="col-md-6"><div class="alert alert-success small p-2"><h6>Punti di forza:</h6><ul><li>Elevata Autonomia Fin. (62,6%)</li><li>Leva Finanziaria ottima (0,40)</li><li>Buona copertura immobilizz.</li><li>PN in forte crescita (+43,4%)</li></ul></div></div> <div class="col-md-6"><div class="alert alert-warning small p-2"><h6>Aree di attenzione:</h6><ul><li>Forte calo Liquidità (-65,5%)</li><li>Crescita Attivo Fisso (+27,2%)</li><li>PFN/EBITDA non calcolabile</li><li>Aumento debiti BT (+12.676%)</li></ul></div></div></div>
+                          </div>
+                      </div>
+                  </div>
+
+                 <!-- Dettaglio Situazione Finanziaria e Flussi -->
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingFinancial"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFinancial" aria-expanded="false" aria-controls="collapseFinancial"> <i class="fas fa-university me-2"></i> Situazione Finanziaria e Flussi<span class="badge bg-danger ms-2">Critica</span> </button> </h2> <!-- Rating downgraded -->
+                      <div id="collapseFinancial" class="accordion-collapse collapse" aria-labelledby="headingFinancial" data-bs-parent="#cdaDetailsAccordion">
+                          <div class="accordion-body">
+                              <!-- Updated content for BFLOWS from PARTE4 and PARTE5 -->
+                               <div class="row mb-4">
+                                   <div class="col-md-6"><h6>Indicatori Sostenibilità Debito</h6><table class="table table-sm table-striped"><tbody><tr><td>PFN/EBITDA</td><td class="value-highlight">NOK</td><td><span class="badge bg-danger">Critico</span></td></tr><tr><td>Leva (D/E)</td><td class="value-highlight">0,40x</td><td><span class="badge bg-success">Ottimo</span></td></tr><tr><td>DSCR</td><td class="value-highlight">1,637x</td><td><span class="badge bg-success">Buono</span></td></tr><tr><td>Oneri Fin./Ricavi</td><td class="value-highlight">3,53%</td><td><span class="badge bg-warning text-dark">Attenzione</span></td></tr><tr><td>CF Op./Ricavi</td><td class="value-highlight">-27,14%</td><td><span class="badge bg-danger">Critico</span></td></tr><tr><td>EBIT/Oneri Fin.</td><td class="value-highlight">-11,29x</td><td><span class="badge bg-danger">Critico</span></td></tr></tbody></table></div>
+                                   <div class="col-md-6"><h6>Posizione Finanziaria Netta</h6><table class="table table-sm table-striped"><tbody><tr><td>Debiti MLT</td><td class="value-highlight">€507.872</td><td><i class="fas fa-arrow-down text-success"></i> -21,5%</td></tr><tr><td>Debiti BT</td><td class="value-highlight">€35.773</td><td><i class="fas fa-arrow-up text-danger"></i> +12.676%</td></tr><tr><td>Totale Debiti Fin.</td><td class="value-highlight">€543.645</td><td><i class="fas fa-arrow-down text-success"></i> -16,0%</td></tr><tr><td>Liquidità</td><td class="value-highlight">€53.476</td><td><i class="fas fa-arrow-down text-danger"></i> -65,5%</td></tr><tr class="table-primary fw-bold"><td>PFN</td><td class="value-highlight">€490.169</td><td><i class="fas fa-arrow-down text-success"></i> -0,4%</td></tr></tbody></table></div>
+                               </div>
+                                <h6 class="mt-3">Analisi dei Flussi di Cassa 2024</h6>
+                                <div class="table-responsive"><table class="table table-sm table-striped">
+                                     <thead class="table-light"><tr><th>Voce</th><th class="text-end">Valore (€)</th><th class="text-end">% Ricavi</th><th>Nota</th></tr></thead>
+                                     <tbody><tr><td>EBITDA</td><td class="text-end text-danger">-71.772</td><td class="text-end">-22,41%</td><td>Margine Op. Lordo Negativo</td></tr><tr><td>Imposte</td><td class="text-end text-success">13.823</td><td class="text-end">4,32%</td><td>Credito Fiscale</td></tr><tr><td>Δ Cap. Circ. Op.</td><td class="text-end text-danger">-164.916</td><td class="text-end">-51,52%</td><td>Assorbimento da Circolante</td></tr>
+                                     <tr class="table-danger fw-bold"><td>Cash Flow Operativo</td><td class="text-end text-danger">-86.913</td><td class="text-end">-27,14%</td><td>Liquidità Negativa da Gestione Core</td></tr><tr><td>CF Investimento</td><td class="text-end text-danger">-372.780</td><td class="text-end">-116,41%</td><td>Assorbimento per Investimenti</td></tr><tr class="table-danger fw-bold"><td>Free Cash Flow (FCF)</td><td class="text-end text-danger">-459.693</td><td class="text-end">-143,55%</td><td>Cassa Libera Negativa</td></tr><tr><td>Var. Debiti Fin.</td><td class="text-end text-danger">-103.269</td><td class="text-end">-32,25%</td><td>Riduzione Indebitamento</td></tr><tr><td>Var. PN (Aumenti Cap.)</td><td class="text-end text-success">461.501</td><td class="text-end">144,11%</td><td>Ingresso Capitale</td></tr><tr class="table-danger fw-bold"><td>Var. Netta Cassa</td><td class="text-end text-danger">-101.461</td><td class="text-end">-31,68%</td><td>Riduzione Liquidità</td></tr></tbody>
+                                </table></div>
+                               <div class="row mt-3"> <div class="col-md-6"><div class="alert alert-success small p-2"><h6>Punti di forza:</h6><ul><li>DSCR positivo (1,637x)</li><li>Riduzione Debito Totale (-16%)</li><li>Supporto patrimoniale (+€461K)</li><li>Capacità indebitamento: €399K</li></ul></div></div> <div class="col-md-6"><div class="alert alert-warning small p-2"><h6>Aree di attenzione:</h6><ul><li>CF Operativo negativo (-€87K)</li><li>FCF fortemente negativo (-€460K)</li><li>Forte calo Liquidità (-65,5%)</li><li>Investimenti elevati (-€373K)</li></ul></div></div></div>
+                          </div>
+                      </div>
+                   </div>
+
+                  <!-- Dettaglio Capitale Circolante -->
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingCapital"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCapital" aria-expanded="false" aria-controls="collapseCapital"> <i class="fas fa-sync-alt me-2"></i> Capitale Circolante <span class="badge bg-danger ms-2">Critico</span> </button> </h2> <!-- Rating downgraded -->
+                      <div id="collapseCapital" class="accordion-collapse collapse" aria-labelledby="headingCapital" data-bs-parent="#cdaDetailsAccordion">
+                          <div class="accordion-body">
+                              <!-- Updated content for BFLOWS from PARTE5 -->
+                              <div class="row mb-4">
+                                  <div class="col-md-6"><h6>Ciclo del Capitale Circolante</h6><table class="table table-sm table-striped"><tbody><tr><td>Giorni Clienti (DSO)</td><td class="value-highlight">343 gg</td><td class="text-danger"><i class="fas fa-arrow-up"></i> +31 gg</td><td><span class="badge bg-danger">Critico</span></td></tr><tr><td>Giorni Magazzino (DIO)</td><td class="value-highlight">0 gg</td><td class="text-success"><i class="fas fa-equals"></i> 0 gg</td><td><span class="badge bg-success">Ottimo</span></td></tr><tr><td>Giorni Fornitori (DPO)</td><td class="value-highlight">256 gg</td><td class="text-danger"><i class="fas fa-arrow-down"></i> -68 gg</td><td><span class="badge bg-warning text-dark">Attenzione</span></td></tr><tr class="table-danger fw-bold"><td>Ciclo del Circolante</td><td class="value-highlight">87 gg</td><td class="text-danger"><i class="fas fa-arrow-up"></i> +99 gg</td><td><span class="badge bg-danger">Peggiorato</span></td></tr></tbody></table></div>
+                                  <div class="col-md-6"><h6>Test di Congruità Componenti</h6><table class="table table-sm table-striped"><tbody><tr><td>Crediti Eccesso (vs 45gg)</td><td class="value-highlight">+298 gg</td><td class="text-danger">~€ 264.922</td></tr><tr><td>Debiti Eccesso (vs 45gg)</td><td class="value-highlight">+211 gg</td><td class="text-success">~€ 92.840</td></tr><tr><td>Magazzino Eccesso (vs 5gg)</td><td class="value-highlight">-5 gg</td><td class="text-success">~€ -10</td></tr></tbody></table></div>
+                              </div>
+                              <h6>Stress Test sul Capitale Circolante</h6>
+                              <div class="table-responsive"><table class="table table-sm table-striped">
+                                  <thead class="table-light"><tr><th>Test</th><th class="text-end">Impatto</th><th class="text-end">Valore Limite</th><th>Rischio</th></tr></thead>
+                                  <tbody><tr><td>Variaz. DSO x Liq.=0</td><td class="text-end">+61 gg</td><td class="text-end">~€ 53.476 assorbiti</td><td><span class="badge bg-danger">Alto</span></td></tr><tr><td>Variaz. DPO x Liq.=0</td><td class="text-end">-83 gg</td><td class="text-end">~€ 36.520 assorbiti</td><td><span class="badge bg-danger">Alto</span></td></tr><tr><td>Fabbisogno Finanziario Ciclo</td><td class="text-end">87 gg</td><td class="text-end">~€ 77.343</td><td><span class="badge bg-danger">Alto</span></td></tr></tbody>
+                              </table></div>
+                              <div class="alert alert-danger mt-3 small p-2"><h5>Criticità Circolante:</h5><ul><li>DSO eccessivo (343gg) e peggioramento ciclo (+99gg).</li><li>Immobilizzo risorse da crediti (+€264.922).</li><li>Vulnerabilità liquidità a variazioni DSO/DPO.</li><li>Riduzione DPO (-68gg) con DSO critico.</li></ul></div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Dettaglio Rischi -->
+                   <div class="accordion-item">
+                       <h2 class="accordion-header" id="headingRisk"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRisk" aria-expanded="false" aria-controls="collapseRisk"> <i class="fas fa-exclamation-triangle me-2"></i> Profilo di Rischio <span class="badge bg-danger ms-2">Alto</span></button> </h2> <!-- Rating downgraded -->
+                       <div id="collapseRisk" class="accordion-collapse collapse" aria-labelledby="headingRisk" data-bs-parent="#cdaDetailsAccordion">
+                           <div class="accordion-body">
+                               <!-- Updated content for BFLOWS from PARTE0, PARTE4, PARTE6 -->
+                                <div class="row">
+                                   <div class="col-md-6"><h6>Indice Rischio Ponderato (IRP)</h6><p>Valore: <strong>57,7 / 100</strong> <span class="badge bg-danger">ALTO</span></p>
+                                     <table class="table table-sm">
+                                         <tr><td>Component Score</td><td class="text-end">29,15</td></tr>
+                                         <tr><td>Leanus Score Norm.</td><td class="text-end">55,06</td></tr>
+                                         <tr><td>Rating MCC Norm.</td><td class="text-end">23,60</td></tr>
+                                         <tr><td>Z-Score Norm.</td><td class="text-end">47,60</td></tr>
+                                     </table>
+                                   </div>
+                                   <div class="col-md-6"><h6>Modelli di Rating</h6><table class="table table-sm"><tbody><tr><td>Z-Score Altman</td><td class="value-highlight">2,38</td><td><span class="badge bg-warning text-dark">Zona Grigia</span></td></tr><tr><td>PD (MCC)</td><td class="value-highlight">3,62%</td><td><span class="badge bg-warning text-dark">Fascia 3</span></td></tr><tr><td>Leanus Score</td><td class="value-highlight">4,05</td><td><span class="badge bg-warning text-dark">Discreto</span></td></tr><tr><td>Categoria Leanus</td><td class="value-highlight">STAR</td><td><span class="badge bg-success">Crescita</span></td></tr></tbody></table></div>
+                                </div>
+                                <h6 class="mt-3">Stress Test Sintesi</h6>
+                                <p class="small">Resistenza Ricavi: +79,26% | Resistenza Costi: -54,82% | Resistenza DSO: +61gg (Critico) | Resistenza DPO: -83gg (Critico)</p>
+                                <div class="row mt-3"><div class="col-md-6"><div class="alert alert-success small p-2"><h6>Positivi:</h6><ul><li>Categoria Leanus STAR</li><li>Patrimonio Netto solido</li><li>Leva finanziaria ottima</li><li>DSCR positivo (1,637)</li></ul></div></div><div class="col-md-6"><div class="alert alert-warning small p-2"><h6>Red Flags:</h6><ul><li>EBITDA negativo (-22,41%)</li><li>DSO eccessivo (343gg)</li><li>Cash Flow Op. negativo</li><li>Costi fissi elevati (72,7%)</li></ul></div></div></div>
+                           </div>
+                       </div>
+                   </div>
+
+                  <!-- Dettaglio Azioni Raccomandate -->
+                   <div class="accordion-item">
+                       <h2 class="accordion-header" id="headingActions"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseActions" aria-expanded="false" aria-controls="collapseActions"> <i class="fas fa-lightbulb me-2"></i> Piano d'Azione </button> </h2>
+                       <div id="collapseActions" class="accordion-collapse collapse" aria-labelledby="headingActions" data-bs-parent="#cdaDetailsAccordion">
+                           <div class="accordion-body">
+                               <!-- Updated content for BFLOWS from PARTE6 -->
+                               <div class="action-item priority-high"><h6>PRIORITÀ ALTA: Ottimizzazione Struttura Costi</h6><div class="action-detail"><strong>1a. Revisione Costi Fissi:</strong> Riduzione 15-20% (€35-45K) con approccio zero-based</div><div class="action-detail"><strong>1b. Variabilizzazione Costi:</strong> Conversione 30% costi fissi in variabili (+€70K EBITDA)</div></div>
+                               <div class="action-item priority-high"><h6>PRIORITÀ ALTA: Gestione Crediti</h6><div class="action-detail"><strong>2a. Factoring Pro-soluto:</strong> Implementazione immediata per crediti >180gg (+€150-200K liq.)</div><div class="action-detail"><strong>2b. Revisione Contratti:</strong> Milestone payments, acconti, penali ritardo (-200gg DSO)</div></div>
+                               <div class="action-item priority-medium"><h6>PRIORITÀ MEDIA: Miglioramento Marginalità</h6><div class="action-detail"><strong>3a. Pricing Strategy:</strong> Revisione listini e focus su servizi alta marginalità (+5-8% EBITDA)</div><div class="action-detail"><strong>3b. Efficienza Operativa:</strong> Ottimizzazione processi e automazione (+€30-50K EBITDA)</div></div>
+                               <div class="action-item priority-medium"><h6>PRIORITÀ MEDIA: Controllo Gestione</h6><div class="action-detail"><strong>4a. Dashboard KPI:</strong> Implementare monitoraggio settimanale cash flow e margini</div><div class="action-detail"><strong>4b. Budget Rolling:</strong> Previsioni mensili e controllo scostamenti</div></div>
+                               <div class="row mt-4"><div class="col-md-6"><div class="alert alert-success"><h6>Impatto Stimato:</h6><ul><li>EBITDA: +€80-100K</li><li>Liquidità: +€200-250K</li><li>DSO: -200-250gg</li><li>Break-even: 12-18 mesi</li></ul></div></div><div class="col-md-6"><div class="alert alert-primary"><h6>Tempistiche:</h6><ul><li>Breve (0-3m): Crediti, Liquidità</li><li>Medio (3-6m): Costi, Controllo</li><li>Lungo (6-12m): Marginalità, Crescita</li></ul></div></div></div>
+                           </div>
+                       </div>
+                   </div>
+
+             </div> <!-- Fine Accordion Principale -->
+
+
+            <!-- Sezione Azioni Prioritarie CDA (Updated for BFLOWS) -->
+             <section id="actions-summary" class="report-section">
+                  <h4 class="section-title small"><i class="fas fa-tasks me-2"></i>AZIONI PRIORITARIE</h4>
+                  <div class="card actions-card"> <!-- Uso di card semplice per la lista -->
+                      <div class="card-body">
+                          <ol class="action-list list-unstyled">
+                              <li>
+                                  <div class="d-flex justify-content-between align-items-start">
+                                      <div>
+                                          <span class="icon-circle icon-circle-sm bg-icon-danger me-2"><i class="fas fa-chart-line"></i></span>
+                                          <strong>Ottimizzare Struttura dei Costi</strong>
+                                          <p class="small text-muted mb-0">Ridurre i costi fissi (€232.775) del 15-20% e variabilizzare parte della struttura.</p>
+                                      </div>
+                                      <span class="priority-badge status-badge bg-danger">Alta Priorità</span>
+                                  </div>
+                              </li>
+                               <li>
+                                  <div class="d-flex justify-content-between align-items-start">
+                                      <div>
+                                           <span class="icon-circle icon-circle-sm bg-icon-danger me-2"><i class="fas fa-hourglass-half"></i></span>
+                                           <strong>Implementare Gestione Crediti Aggressiva</strong>
+                                          <p class="small text-muted mb-0">Ridurre DSO da 343 a 90-120 giorni con factoring pro-soluto e revisione contratti.</p>
+                                      </div>
+                                      <span class="priority-badge status-badge bg-danger">Alta Priorità</span> <!-- Changed to Alta -->
+                                  </div>
+                              </li>
+                               <li>
+                                  <div class="d-flex justify-content-between align-items-start">
+                                       <div>
+                                           <span class="icon-circle icon-circle-sm bg-icon-warning me-2"><i class="fas fa-percent"></i></span>
+                                           <strong>Migliorare Marginalità Operativa</strong>
+                                          <p class="small text-muted mb-0">Revisione pricing e focus su servizi ad alto valore aggiunto per EBITDA positivo.</p>
+                                       </div>
+                                      <span class="priority-badge status-badge bg-warning text-dark">Media Priorità</span>
+                                  </div>
+                              </li>
+                               <li>
+                                  <div class="d-flex justify-content-between align-items-start">
+                                       <div>
+                                            <span class="icon-circle icon-circle-sm bg-icon-warning me-2"><i class="fas fa-water"></i></span> <!-- Changed icon -->
+                                            <strong>Implementare Controllo di Gestione</strong>
+                                           <p class="small text-muted mb-0">Dashboard KPI con monitoraggio settimanale di cash flow, margini e capitale circolante.</p>
+                                       </div>
+                                      <span class="priority-badge status-badge bg-warning text-dark">Media Priorità</span> <!-- Changed Priority -->
+                                  </div>
+                              </li>
+                          </ol>
+                      </div>
+                  </div>
+             </section>
+        </div> <!-- /dashboard-container -->
+
+        <!-- Footer Standard V2 (Nessuna modifica necessaria) -->
+        <footer class="footer no-print">
+             <div class="container-fluid px-4"> <div class="row"> <div class="col-md-6 text-center text-md-start mb-2 mb-md-0"> SCAN360 © <span id="currentYearFooterReport"></span> </div> <div class="col-md-6 text-center text-md-end"> Powered by <a href="http://www.kitzanos.com" target="_blank" class="text-white fw-bold">Kitzanos Lab</a> <img src="assets/img/logo_kitzanos.png" alt="Kitzanos Logo" class="ms-2" style="height: 20px; vertical-align: middle;">
+ </div> </div> </div> <!-- Adjusted Path -->
+        </footer>
+
+    </div> <!-- /main-wrapper -->
+
+    <!-- Script JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- ### START EMBEDDED JAVASCRIPT ### -->
+    <script src= "./js/monitor_cda.js"></script>
+    <!-- ### END EMBEDDED JAVASCRIPT ### -->
+
+<scan-chat data-bot-id="62e05413-c32c-4f33-b2ea-cefa55a601fb"></scan-chat>
+<script src="../js/bundle.js"></script>
+</body>
+</html>

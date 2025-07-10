@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Economica e Benchmark - BFLOWS S.R.L. | SCAN V9</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/print.css" rel="stylesheet" media="print">
+     <style>
+        .table-success-light { background-color: #d1e7dd !important; }
+        .table-warning-light { background-color: #fff3cd !important; }
+        .table-danger-light { background-color: #f8d7da !important; }
+     </style>
+</head>
+<body>
+
+ <!-- Sidebar -->
+    <aside class="sidebar no-print">
+        <div class="sidebar-header"> <img src="../assets/img/logo_scan.png" alt="SCAN Logo" style="max-height: 40px;"> <h5>BFLOWS S.R.L.</h5> </div>
+        <ul class="sidebar-nav flex-grow-1">
+            <li class="nav-item"> <a class="nav-link" href="../dashboard_v2.html"> <i class="fas fa-tachometer-alt fa-fw"></i> Dashboard </a> </li>
+            <li class="nav-title">Analisi Dettagliata</li>
+            <li class="nav-item"> <a class="nav-link" href="parte1_sintesi.html"> <i class="fas fa-file-alt fa-fw"></i> Sintesi e Profilo </a> </li>
+            <li class="nav-item"> <a class="nav-link active" href="parte2_economico.html"> <i class="fas fa-balance-scale fa-fw"></i> Analisi Economica </a> </li>
+            <li class="nav-item"> <a class="nav-link" href="parte3_patrimoniale.html"> <i class="fas fa-landmark fa-fw"></i> Analisi Patrimoniale </a> </li>
+            <li class="nav-item"> <a class="nav-link" href="parte4_bancabilita.html"> <i class="fas fa-university fa-fw"></i> Bancabilità </a> </li>
+            <li class="nav-item"> <a class="nav-link" href="parte5_circolante_flussi.html"> <i class="fas fa-sync-alt fa-fw"></i> Circolante e Flussi </a> </li>
+            <li class="nav-item"> <a class="nav-link" href="parte6_rischi-raccomandazioni.html"> <i class="fas fa-exclamation-triangle fa-fw"></i> Rischi e Azioni </a> </li>
+            <li class="nav-title">Approfondimenti</li>
+            <li class="nav-item"> <a class="nav-link" href="irp_dettaglio.html"> <i class="fas fa-shield-alt fa-fw"></i> Dettaglio IRP </a> </li>
+        </ul>
+        <div class="sidebar-footer"> <small>SCAN360 © <span id="currentYearSidebar"></span> Kitzanos</small> </div>
+    </aside>
+
+
+    <!-- Contenuto Principale Wrapper -->
+    <div class="main-wrapper">
+        <!-- Header Orizzontale -->
+        <header class="dashboard-header no-print">
+            <div class="header-title">
+                <h5 class="mb-0">Report Dettagliato: Analisi Economica e Benchmark</h5>
+                <p class="mb-0">BFLOWS S.R.L. | <span class="report-date">31 Dicembre 2024</span></p>
+            </div>
+            <div class="header-controls d-flex align-items-center">
+                <span id="irp-header-badge" class="badge me-3"></span>
+                <button class="btn btn-sm btn-outline-secondary me-2 print-button" onclick="printDocument()"> <i class="fas fa-print"></i> Stampa </button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light border dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-user-circle me-1"></i> BFLOWS S.R.L. </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton"> <li><button class="dropdown-item" type="button" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</button></li> </ul>
+                </div>
+            </div>
+        </header>
+        <div class="container d-none d-print-block mt-4 mb-4">
+            <h1 class="text-center mb-0"><span class="company-name">BFLOWS S.R.L.</span></h1>
+            <p class="text-center mb-0">Report Dettagliato: Analisi Economica e Benchmark | <span class="report-date">31 Dicembre 2024</span></p>
+            <hr>
+        </div>
+
+        <!-- Area Contenuto Specifico del Report -->
+        <div class="dashboard-container">
+
+            <!-- ================================================================ -->
+            <!-- CONTENUTO SPECIFICO PARTE 2 - V9 - Updated for BFLOWS -->
+            <!-- ================================================================ -->
+
+             <h2 class="section-title" id="economic-analysis"><i class="fas fa-balance-scale me-2"></i>SEZIONE 2.1: ANALISI ECONOMICA</h2>
+
+            <div class="card mb-4 report-section">
+                <div class="card-header"><h5 class="mb-0">2.1.1 Conto Economico Riclassificato</h5></div>
+                <div class="card-body">
+                    <p>Il conto economico riclassificato evidenzia la struttura dei costi e dei ricavi di BFLOWS S.R.L. nel periodo 2022-2024, consentendo di valutare la redditività operativa e netta.</p>
+
+                     <h6 class="mt-4 text-center small">Grafico 2.1: Andamento Ricavi ed EBITDA 2022-2024 (€000 e %)</h6>
+                     <div class="chart-container mb-4" style="height: 350px;">
+                         <canvas id="economicTrendChart"></canvas>
+                     </div>
+
+                    <h6 class="mt-4">Tabella 2.1: Conto Economico Riclassificato 2022-2024 (valori in €)</h6>
+                     <div class="table-responsive">
+                         <table class="table table-sm table-striped table-hover">
+                             <thead class="table-light">
+                                 <tr><th>Voce</th><th class="text-end">2022</th><th class="text-end">% Ricavi</th><th class="text-end">2023</th><th class="text-end">% Ricavi</th><th class="text-end">2024</th><th class="text-end">% Ricavi</th><th class="text-end">Var. % 23-24</th></tr>
+                             </thead>
+                             <tbody>
+                                 <tr><td>Ricavi</td><td class="text-end">21.000</td><td class="text-end">100,0%</td><td class="text-end">197.250</td><td class="text-end">100,0%</td><td class="text-end">320.260</td><td class="text-end">100,0%</td><td class="text-success">+62,36%</td></tr>
+                                 <tr><td>- Acquisti e consumi</td><td class="text-end">-8</td><td class="text-end">0,0%</td><td class="text-end">-209</td><td class="text-end">-0,1%</td><td class="text-end">-785</td><td class="text-end">-0,2%</td><td class="text-danger">+275,60%</td></tr>
+                                 <tr class="table-secondary"><td>= Valore Aggiunto su Consumi</td><td class="text-end">21.008</td><td class="text-end">100,0%</td><td class="text-end">197.041</td><td class="text-end">99,9%</td><td class="text-end">319.475</td><td class="text-end">99,8%</td><td class="text-success">+62,12%</td></tr>
+                                 <tr><td>- Costi variabili di produzione</td><td class="text-end">-96.159</td><td class="text-end">-457,9%</td><td class="text-end">-164.866</td><td class="text-end">-83,6%</td><td class="text-end">-158.472</td><td class="text-end">-49,5%</td><td class="text-success">-3,88%</td></tr>
+                                 <tr class="table-secondary"><td>= Margine di Contribuzione</td><td class="text-end">-75.151</td><td class="text-end">-357,9%</td><td class="text-end">32.175</td><td class="text-end">16,3%</td><td class="text-end">161.003</td><td class="text-end">50,3%</td><td class="text-success">+400,40%</td></tr>
+                                 <tr><td>- Costi fissi</td><td class="text-end">-131.866</td><td class="text-end">-627,9%</td><td class="text-end">-115.048</td><td class="text-end">-58,3%</td><td class="text-end">-232.775</td><td class="text-end">-72,7%</td><td class="text-danger">+102,27%</td></tr>
+                                 <tr class="table-danger fw-bold"><td>= EBITDA</td><td class="text-end">-207.017</td><td class="text-end">-985,8%</td><td class="text-end">-82.873</td><td class="text-end">-42,0%</td><td class="text-end">-71.772</td><td class="text-end">-22,4%</td><td class="text-success">+13,40%</td></tr>
+                                 <tr><td>- Ammortamenti e svalutazioni</td><td class="text-end">-7.775</td><td class="text-end">-37,0%</td><td class="text-end">-10.793</td><td class="text-end">-5,5%</td><td class="text-end">-55.841</td><td class="text-end">-17,4%</td><td class="text-danger">+417,32%</td></tr>
+                                 <tr class="table-secondary"><td>= EBIT</td><td class="text-end">-214.792</td><td class="text-end">-1.022,8%</td><td class="text-end">-93.666</td><td class="text-end">-47,5%</td><td class="text-end">-127.613</td><td class="text-end">-39,9%</td><td class="text-danger">+36,25%</td></tr>
+                                 <tr><td>+/- Saldo Oneri/Ricavi Diversi</td><td class="text-end">6.681</td><td class="text-end">31,8%</td><td class="text-end">-16.039</td><td class="text-end">-8,1%</td><td class="text-end">76.978</td><td class="text-end">24,0%</td><td class="text-success">-579,89%</td></tr>
+                                 <tr class="table-secondary"><td>= Margine Ante Gestione Fin.</td><td class="text-end">-208.111</td><td class="text-end">-991,0%</td><td class="text-end">-109.705</td><td class="text-end">-55,6%</td><td class="text-end">-50.635</td><td class="text-end">-15,8%</td><td class="text-success">-53,84%</td></tr>
+                                 <tr><td>+/- Gestione Finanziaria</td><td class="text-end">-12.711</td><td class="text-end">-60,5%</td><td class="text-end">-9.603</td><td class="text-end">-4,9%</td><td class="text-end">-11.293</td><td class="text-end">-3,5%</td><td class="text-danger">+17,60%</td></tr>
+                                 <tr class="table-secondary"><td>= Risultato Ante Imposte (EBT)</td><td class="text-end">-220.822</td><td class="text-end">-1.051,5%</td><td class="text-end">-119.308</td><td class="text-end">-60,5%</td><td class="text-end">-61.928</td><td class="text-end">-19,3%</td><td class="text-success">-48,09%</td></tr>
+                                 <tr><td>- Imposte</td><td class="text-end">19.677</td><td class="text-end">93,7%</td><td class="text-end">26.584</td><td class="text-end">13,5%</td><td class="text-end">13.823</td><td class="text-end">4,3%</td><td class="text-danger">-48,00%</td></tr>
+                                 <tr class="table-danger fw-bold"><td>= Utile/Perdita di esercizio</td><td class="text-end">-201.145</td><td class="text-end">-957,8%</td><td class="text-end">-92.724</td><td class="text-end">-47,0%</td><td class="text-end">-48.105</td><td class="text-end">-15,0%</td><td class="text-success">-48,13%</td></tr>
+                             </tbody>
+                         </table>
+                     </div>
+
+                    <h6 class="mt-4">Analisi del Conto Economico (BFLOWS):</h6>
+                    <ol class="small">
+                        <li><strong>Ricavi:</strong> Crescita eccezionale (+62,36%) nel 2024 dopo un incremento ancora più significativo nel 2023 (+839,29%).</li>
+                        <li><strong>Margine di Contribuzione:</strong> Significativo miglioramento con passaggio da 16,3% nel 2023 a 50,3% nel 2024, rappresentando una svolta nella capacità di generare valore.</li>
+                        <li><strong>EBITDA:</strong> Nonostante il miglioramento, rimane negativo (-22,4%) ma in tendenziale miglioramento rispetto al -42,0% del 2023.</li>
+                        <li><strong>Costi Fissi:</strong> Forte incremento (+102,27%) principalmente dovuto all'espansione del personale (da €54.877 a €162.516).</li>
+                        <li><strong>Ammortamenti:</strong> Incremento significativo (+417,32%) legato agli investimenti in immobilizzazioni immateriali.</li>
+                        <li><strong>Utile Netto:</strong> Perdita in riduzione da €92.724 (2023) a €48.105 (2024), segnalando un percorso verso l'equilibrio economico.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card mb-4 report-section">
+                <div class="card-header"><h5 class="mb-0">2.1.2 Analisi della Marginalità</h5></div>
+                 <div class="card-body">
+                    <p>L'analisi della marginalità valuta la capacità di generare valore aggiunto.</p>
+                    <div class="row">
+                        <div class="col-lg-7 mb-3 mb-lg-0">
+                            <h6 class="text-center small">Grafico 2.2: Evoluzione delle Principali Marginalità (%)</h6>
+                             <div class="chart-container" style="height: 350px;">
+                                 <canvas id="marginalityChart"></canvas>
+                             </div>
+                        </div>
+                         <div class="col-lg-5">
+                             <h6>Tabella 2.2: Evoluzione Indici di Marginalità (BFLOWS)</h6>
+                             <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover">
+                                     <thead><tr><th>Indicatore</th><th class="text-end">2022</th><th class="text-end">2023</th><th class="text-end">2024</th><th>Trend</th></tr></thead>
+                                     <tbody>
+                                         <tr><td>Valore Aggiunto/Ricavi</td><td class="text-end">100,0%</td><td class="text-end">99,9%</td><td class="text-end">99,8%</td><td class="text-danger"><i class="fas fa-arrow-down"></i></td></tr>
+                                         <tr><td>MdC/Ricavi</td><td class="text-end">-357,9%</td><td class="text-end">16,3%</td><td class="text-end">50,3%</td><td class="text-success"><i class="fas fa-arrow-up"></i></td></tr>
+                                         <tr><td>EBITDA/Ricavi</td><td class="text-end">-985,8%</td><td class="text-end">-42,0%</td><td class="text-end">-22,4%</td><td class="text-success"><i class="fas fa-arrow-up"></i></td></tr>
+                                         <tr><td>ROS (EBIT/Ricavi)</td><td class="text-end">-1022,8%</td><td class="text-end">-47,5%</td><td class="text-end">-39,9%</td><td class="text-success"><i class="fas fa-arrow-up"></i></td></tr>
+                                         <tr><td>Utile Netto/Ricavi</td><td class="text-end">-957,8%</td><td class="text-end">-47,0%</td><td class="text-end">-15,0%</td><td class="text-success"><i class="fas fa-arrow-up"></i></td></tr>
+                                         <tr class="table-secondary"><td>Break-Even Point (€)</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end">574.102</td><td><i class="fas fa-times text-danger"></i></td></tr>
+                                         <tr class="table-secondary"><td>Margine Sicurezza</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end">-79,26%</td><td><i class="fas fa-times text-danger"></i></td></tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                             <h6 class="mt-3">Break-Even e Leva Operativa (2024 - BFLOWS)</h6>
+                             <div class="alert-box alert-info small mt-2 p-2">
+                                 <ul class="list-unstyled mb-0">
+                                     <li><i class="fas fa-bullseye me-1"></i> BEP: €574.102 | Margine Sicurezza: -79,26% (Critico)</li>
+                                     <li><i class="fas fa-calculator me-1"></i> Moltiplicatore CF: 1,99</li>
+                                     <li><i class="fas fa-arrows-alt-v me-1"></i> Necessario incremento ricavi: +79,26% per break-even</li>
+                                 </ul>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+
+            <div class="card mb-4 report-section">
+                 <div class="card-header"><h5 class="mb-0">2.1.3 Struttura e Dettaglio Principali Costi</h5></div>
+                 <div class="card-body">
+                     <p>Analisi delle principali voci di costo e loro incidenza.</p>
+                     <h6 class="mt-4">Tabella 2.3: Struttura dei Costi 2023-2024 (BFLOWS)</h6>
+                      <div class="table-responsive">
+                         <table class="table table-sm table-striped table-hover">
+                            <thead class="table-light">
+                                <tr><th>Categoria di Costo</th><th class="text-end">2023 (€)</th><th class="text-end">% Ricavi</th><th class="text-end">2024 (€)</th><th class="text-end">% Ricavi</th><th>Var%</th><th>Benchmark</th><th>Valutazione</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Acquisti e consumi</td><td class="text-end">209</td><td class="text-end">0,1%</td><td class="text-end">785</td><td class="text-end">0,2%</td><td class="text-danger">+275,60%</td><td>1-3%</td><td><span class="status-badge bg-success">Efficiente</span></td></tr>
+                                <tr><td>Costi variabili prod.</td><td class="text-end">164.866</td><td class="text-end">83,6%</td><td class="text-end">158.472</td><td class="text-end">49,5%</td><td class="text-success">-3,88%</td><td>30-40%</td><td><span class="status-badge bg-warning">Elevato</span></td></tr>
+                                <tr><td>Costo del personale</td><td class="text-end">54.877</td><td class="text-end">27,8%</td><td class="text-end">162.516</td><td class="text-end">50,8%</td><td class="text-danger">+196,16%</td><td>40-50%</td><td><span class="status-badge bg-warning">Elevato</span></td></tr>
+                                <tr><td>Altri costi fissi</td><td class="text-end">60.171</td><td class="text-end">30,5%</td><td class="text-end">70.259</td><td class="text-end">21,9%</td><td class="text-danger">+16,77%</td><td>5-10%</td><td><span class="status-badge bg-danger">Molto Elevato</span></td></tr>
+                                <tr><td>Ammortamenti</td><td class="text-end">10.793</td><td class="text-end">5,5%</td><td class="text-end">55.841</td><td class="text-end">17,4%</td><td class="text-danger">+417,32%</td><td>3-5%</td><td><span class="status-badge bg-danger">Molto Elevato</span></td></tr>
+                                <tr><td>Oneri diversi</td><td class="text-end">17.677</td><td class="text-end">9,0%</td><td class="text-end">11.583</td><td class="text-end">3,6%</td><td class="text-success">-34,48%</td><td>2-4%</td><td><span class="status-badge bg-secondary">In linea</span></td></tr>
+                                <tr><td>Oneri finanziari</td><td class="text-end">9.603</td><td class="text-end">4,9%</td><td class="text-end">11.293</td><td class="text-end">3,5%</td><td class="text-danger">+17,60%</td><td>1-3%</td><td><span class="status-badge bg-warning">Elevato</span></td></tr>
+                            </tbody>
+                         </table>
+                     </div>
+                     <h6 class="mt-4">Approfondimento (BFLOWS):</h6>
+                     <ul class="small">
+                          <li><strong>Costi variabili (49,5%):</strong> Incidenza in calo significativo rispetto al 2023 (83,6%), ma ancora sopra benchmark.</li>
+                          <li><strong>Personale (50,8%):</strong> Forte incremento (+196,16%) legato all'espansione del team, incidenza al limite superiore del benchmark.</li>
+                          <li><strong>Altri costi fissi (21,9%):</strong> Incidenza molto elevata rispetto al benchmark (5-10%), richiede analisi dettagliata.</li>
+                          <li><strong>Ammortamenti (17,4%):</strong> Incremento significativo legato agli investimenti in immobilizzazioni immateriali, ben sopra benchmark.</li>
+                          <li><strong>Oneri finanziari (3,5%):</strong> Incidenza sopra benchmark nonostante la buona struttura patrimoniale.</li>
+                     </ul>
+                 </div>
+            </div>
+
+            <div class="card mb-4 report-section">
+                <div class="card-header"><h5 class="mb-0">2.1.4 Indici di Redditività</h5></div>
+                 <div class="card-body">
+                     <p>Analisi della capacità di generare ritorni adeguati.</p>
+                      <div class="row">
+                         <div class="col-lg-7 mb-3 mb-lg-0">
+                             <h6>Tabella 2.4: Indici di Redditività 2022-2024 (BFLOWS)</h6>
+                              <div class="table-responsive">
+                                 <table class="table table-sm table-striped table-hover">
+                                     <thead class="table-light"><tr><th>Indice</th><th>Formula</th><th class="text-end">2022</th><th class="text-end">2023</th><th class="text-end">2024</th><th>Soglia</th><th>Valutazione</th></tr></thead>
+                                     <tbody>
+                                         <tr><td>ROE</td><td>Utile/PN</td><td class="text-end">-82,46%</td><td class="text-end">-9,73%</td><td class="text-end">-3,52%</td><td>>7%</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                         <tr><td>ROI</td><td>EBIT/CIN</td><td class="text-end">-23,74%</td><td class="text-end">-6,48%</td><td class="text-end">-6,87%</td><td>>10%</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                         <tr><td>ROS</td><td>EBIT/Ricavi</td><td class="text-end">-1022,8%</td><td class="text-end">-47,5%</td><td class="text-end">-39,9%</td><td>>6-8%</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                         <tr><td>EBITDA Margin</td><td>EBITDA/Ricavi</td><td class="text-end">-985,8%</td><td class="text-end">-42,0%</td><td class="text-end">-22,4%</td><td>>10-12%</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                         <tr><td>Utile Netto/Ricavi</td><td>Utile/Ricavi</td><td class="text-end">-957,8%</td><td class="text-end">-47,0%</td><td class="text-end">-15,0%</td><td>>4-5%</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                         <tr><td>Turnover</td><td>Ricavi/CIN</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end">0,17</td><td>>0,8-1,5</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                         </div>
+                          <div class="col-lg-5">
+                              <h6 class="text-center small">Grafico 2.3: Andamento Redditività (%)</h6>
+                              <div class="chart-container" style="height: 280px;"> <canvas id="profitabilityIndicesChart"></canvas> </div>
+                         </div>
+                     </div>
+                      <h6 class="mt-4">Analisi (BFLOWS):</h6>
+                      <ul class="small">
+                          <li><strong>ROE (-3,52%):</strong> Negativo ma in miglioramento rispetto al 2023 (-9,73%), riflette le perdite d'esercizio.</li>
+                          <li><strong>ROI (-6,87%):</strong> Valore negativo in leggero peggioramento rispetto al 2023, riflette l'incapacità di generare rendimenti positivi.</li>
+                          <li><strong>ROS (-39,9%):</strong> Miglioramento da -47,5% a -39,9%, pur rimanendo fortemente negativo, evidenzia il trend di recupero della redditività.</li>
+                          <li><strong>EBITDA Margin (-22,4%):</strong> In miglioramento ma ancora fortemente negativo, segnala criticità operativa.</li>
+                          <li><strong>Turnover (0,17x):</strong> Valore estremamente basso che indica un'inefficiente utilizzo degli asset investiti.</li>
+                      </ul>
+                 </div>
+            </div>
+
+             <div class="card mb-4 report-section">
+                <div class="card-header"><h5 class="mb-0">2.1.5 Effetto Leva Finanziaria</h5></div>
+                 <div class="card-body">
+                     <p>Valutazione dell'impatto dell'indebitamento sulla redditività del capitale proprio.</p>
+                      <div class="row">
+                          <div class="col-lg-7 mb-3 mb-lg-0">
+                              <h6>Tabella 2.5: Analisi Effetto Leva 2022-2024 (BFLOWS)</h6>
+                              <div class="table-responsive">
+                                 <table class="table table-sm table-striped table-hover">
+                                      <thead><tr><th>Componente</th><th>Formula</th><th class="text-end">2022</th><th class="text-end">2023</th><th class="text-end">2024</th></tr></thead>
+                                      <tbody>
+                                          <tr><td>ROI</td><td>EBIT/CIN</td><td class="text-end">-23,74%</td><td class="text-end">-6,48%</td><td class="text-end">-6,87%</td></tr>
+                                          <tr><td>Costo medio debito (i)</td><td>Oneri Fin./Debiti Fin.</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end">1,90%</td></tr>
+                                          <tr><td>Rapporto D/E</td><td>Debiti Fin./PN</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end">0,40</td></tr>
+                                          <tr class="table-secondary"><td>Spread (ROI-i)</td><td>ROI - i</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end text-danger">-8,77%</td></tr>
+                                          <tr class="table-secondary"><td>Effetto Leva</td><td>(ROI-i) × D/E</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end text-danger">Negativo</td></tr>
+                                          <tr><td>ROE calcolato</td><td>ROI + Effetto Leva</td><td class="text-end">N/D</td><td class="text-end">N/D</td><td class="text-end">N/D</td></tr>
+                                          <tr class="fw-bold"><td>ROE effettivo</td><td>Utile Netto/PN</td><td class="text-end">-82,46%</td><td class="text-end">-9,73%</td><td class="text-end">-3,52%</td></tr>
+                                      </tbody>
+                                 </table>
+                              </div>
+                          </div>
+                          <div class="col-lg-5">
+                               <h6 class="text-center small">Grafico 2.4: Confronto ROI vs ROE (%)</h6>
+                               <div class="chart-container" style="height: 250px;"> <canvas id="leverageChart"></canvas> </div>
+                                <h6 class="mt-4">Analisi Leva (BFLOWS):</h6>
+                               <ul class="small list-unstyled">
+                                   <li><i class="fas fa-times-circle text-danger me-1"></i> Spread (ROI-i) negativo (-8,77%), amplifica le perdite.</li>
+                                   <li><i class="fas fa-check-circle text-success me-1"></i> Leva D/E moderata (0,40x - Ottima), limita l'effetto negativo.</li>
+                                   <li><i class="fas fa-arrow-down text-danger me-1"></i> ROI negativo (-6,87%) determina un effetto leva penalizzante.</li>
+                                   <li><i class="fas fa-info-circle text-info me-1"></i> Costo del debito contenuto (1,90%) ma superiore al ROI.</li>
+                               </ul>
+                          </div>
+                      </div>
+                 </div>
+            </div>
+
+             <h2 class="section-title mt-5" id="benchmark"><i class="fas fa-chart-bar me-2"></i>SEZIONE 2.2: BENCHMARK E POSIZIONAMENTO COMPETITIVO</h2>
+
+            <div class="card mb-4 report-section">
+                <div class="card-header"><h5 class="mb-0">2.2.1 Posizionamento Competitivo</h5></div>
+                 <div class="card-body">
+                     <p>Valutazione della performance rispetto al settore "Attività di programmazione informatica".</p>
+                     <div class="row">
+                         <div class="col-lg-7 mb-3 mb-lg-0">
+                              <h6 class="text-center small">Grafico 2.5: Posizionamento Competitivo (Base 100 = Media Settore)</h6>
+                             <div class="chart-container" style="height: 350px;"> <canvas id="benchmarkRadarChart"></canvas>
+                                 <script>
+                                     document.addEventListener('DOMContentLoaded', function() {
+                                         const ctxBenchmarkRadar = document.getElementById('benchmarkRadarChart');
+
+                                         if (ctxBenchmarkRadar) {
+                                             try {
+                                                  const benchmarkRadarData = {
+                                                     labels: ["Crescita Ricavi", "EBITDA Margin", "ROI", "Turnover", "Costo Personale (inv)", "PFN/EBITDA (inv)", "D/E (inv)"],
+                                                     datasets: [
+                                                         {
+                                                             label: "BFLOWS S.R.L.",
+                                                             data: [312, 0, 0, 21, 79, 0, 250],
+                                                             backgroundColor: "rgba(25, 25, 112, 0.3)",
+                                                             borderColor: "rgba(25, 25, 112, 1)",
+                                                             borderWidth: 2, pointBackgroundColor: "rgba(25, 25, 112, 1)", pointBorderColor: "#fff",
+                                                             pointHoverBackgroundColor: "#fff", pointHoverBorderColor: "rgba(25, 25, 112, 1)"
+                                                         },
+                                                         {
+                                                             label: "Media Settore",
+                                                             data: [100, 100, 100, 100, 100, 100, 100],
+                                                             backgroundColor: "rgba(217, 140, 0, 0.3)",
+                                                             borderColor: "rgba(217, 140, 0, 1)",
+                                                             borderWidth: 2, pointBackgroundColor: "rgba(217, 140, 0, 1)", pointBorderColor: "#fff",
+                                                             pointHoverBackgroundColor: "#fff", pointHoverBorderColor: "rgba(217, 140, 0, 1)"
+                                                         }
+                                                     ]
+                                                 };
+
+                                                 const benchmarkRadarOptions = {
+                                                     responsive: true,
+                                                     maintainAspectRatio: false,
+                                                       scales: {
+                                                          r: {
+                                                              angleLines: { color: '#e0e0e0' }, grid: { color: '#e0e0e0' },
+                                                              pointLabels: { font: { size: 10 } },
+                                                              ticks: {
+                                                                  backdropColor: 'rgba(255, 255, 255, 0.75)', font: { size: 9 },
+                                                                  maxTicksLimit: 5,
+                                                              },
+                                                              suggestedMin: 0,
+                                                          }
+                                                       },
+                                                       plugins: {
+                                                            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15, font: { size: 11 } } },
+                                                            title: { display: false },
+                                                            tooltip: {
+                                                                backgroundColor: 'rgba(0, 0, 0, 0.8)', titleFont: { weight: 'bold', size: 13 },
+                                                                bodyFont: { size: 12 }, padding: 10, cornerRadius: 4, displayColors: true, boxPadding: 4,
+                                                                callbacks: {
+                                                                    label: function(context) {
+                                                                        let label = context.dataset.label || '';
+                                                                        if (label) label += ': ';
+                                                                        if (context.parsed.r !== null) { label += context.parsed.r.toFixed(1); }
+                                                                        else { label += 'N/D'; }
+                                                                        return label;
+                                                                    }
+                                                                }
+                                                            }
+                                                       },
+                                                       animation: { duration: 400 }
+                                                 };
+
+                                                 const existingChart = Chart.getChart(ctxBenchmarkRadar);
+                                                 if (existingChart instanceof Chart) {
+                                                     existingChart.destroy();
+                                                 }
+
+                                                 new Chart(ctxBenchmarkRadar, {
+                                                     type: 'radar',
+                                                     data: benchmarkRadarData,
+                                                     options: benchmarkRadarOptions
+                                                 });
+                                                 console.log("Grafico benchmarkRadarChart inizializzato direttamente in HTML.");
+
+                                             } catch (error) {
+                                                 console.error("Errore inizializzazione grafico benchmarkRadarChart in HTML:", error);
+                                                  const ctx = ctxBenchmarkRadar.getContext('2d');
+                                                   if (ctx) {
+                                                       ctx.clearRect(0, 0, ctxBenchmarkRadar.width, ctxBenchmarkRadar.height);
+                                                       ctx.font = '14px Titillium Web, sans-serif';
+                                                       ctx.fillStyle = '#dc3545';
+                                                       ctx.textAlign = 'center';
+                                                       ctx.fillText('Errore durante il caricamento del grafico.', ctxBenchmarkRadar.width / 2, ctxBenchmarkRadar.height / 2);
+                                                   }
+                                             }
+                                         } else {
+                                              console.warn("Canvas 'benchmarkRadarChart' non trovato.");
+                                         }
+                                     });
+                                 </script>
+                             </div>
+                         </div>
+                         <div class="col-lg-5">
+                              <h6>Tabella 2.6: Posizionamento Competitivo 2024 (BFLOWS)</h6>
+                              <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover">
+                                    <thead><tr><th>Indicatore</th><th>BFLOWS</th><th>Media Sett.</th><th>Gap</th><th>Valutazione</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Crescita ricavi</td><td>+62,36%</td><td>+15-25%</td><td class="text-success">+40 p.p.</td><td><span class="status-badge bg-success">Superiore</span></td></tr>
+                                        <tr><td>EBITDA Margin</td><td>-22,41%</td><td>15-20%</td><td class="text-danger">-40 p.p.</td><td><span class="status-badge bg-danger">Inferiore</span></td></tr>
+                                        <tr><td>ROS</td><td>-39,85%</td><td>8-12%</td><td class="text-danger">-50 p.p.</td><td><span class="status-badge bg-danger">Inferiore</span></td></tr>
+                                        <tr><td>Turnover</td><td>0,17x</td><td>0,8-1,2x</td><td class="text-danger">-0,8x</td><td><span class="status-badge bg-danger">Inferiore</span></td></tr>
+                                        <tr><td>ROI</td><td>-6,87%</td><td>15-20%</td><td class="text-danger">-25 p.p.</td><td><span class="status-badge bg-danger">Inferiore</span></td></tr>
+                                        <tr><td>Leva D/E</td><td>0,40x</td><td>0,3-0,5x</td><td class="text-success">In linea</td><td><span class="status-badge bg-secondary">In linea</span></td></tr>
+                                        <tr><td>Ciclo Circolante</td><td>87 gg</td><td>30-45 gg</td><td class="text-danger">+45 gg</td><td><span class="status-badge bg-danger">Inferiore</span></td></tr>
+                                        <tr><td>PFN/EBITDA</td><td>NOK</td><td>2-3x</td><td class="text-danger">N/A</td><td><span class="status-badge bg-danger">Critico</span></td></tr>
+                                    </tbody>
+                                </table>
+                              </div>
+                         </div>
+                     </div>
+                      <h6 class="mt-4">Analisi posizionamento (BFLOWS):</h6>
+                      <p class="small mb-0">BFLOWS S.R.L. presenta un posizionamento competitivo in fase di consolidamento, caratterizzato da <strong>dimensione ancora inferiore alla media di settore ma con forte dinamica di crescita</strong>. La marginalità è attualmente problematica ma in miglioramento, mentre la struttura finanziaria è solida con liquidità superiore al benchmark. La gestione del credito richiede ottimizzazione (DSO 343 giorni vs 45-60 del settore).</p>
+                 </div>
+            </div>
+
+             <div class="card mb-4 report-section">
+                 <div class="card-header"><h5 class="mb-0">2.2.2 Gap Analysis vs Best Practice</h5></div>
+                  <div class="card-body">
+                     <p>Identificazione aree di miglioramento rispetto alle best practice.</p>
+                     <h6 class="mt-4">Tabella 2.7: Gap Analysis 2024 (BFLOWS)</h6>
+                      <div class="table-responsive">
+                         <table class="table table-sm table-striped table-hover">
+                            <thead class="table-light"> <tr><th>Area</th><th>Indicatore</th><th>Valore Attuale</th><th>Best Practice</th><th>Gap</th><th>Impatto Potenziale</th><th>Priorità</th></tr></thead>
+                             <tbody>
+                                <tr><td>Redditività</td><td>EBITDA Margin</td><td>-22,4%</td><td>15-20%</td><td class="text-danger">-40%</td><td>€120K-€135K EBITDA</td><td><span class="status-badge bg-danger">Alta</span></td></tr>
+                                <tr><td>Gestione Crediti</td><td>DSO (gg)</td><td>343</td><td>45-60</td><td class="text-danger">+290 gg</td><td>€250K capitale immob.</td><td><span class="status-badge bg-danger">Alta</span></td></tr>
+                                <tr><td>Efficienza</td><td>Asset Turnover</td><td>0,17x</td><td>0,8-1,2x</td><td class="text-danger">-0,8x</td><td>€1.2M ricavi potenziali</td><td><span class="status-badge bg-danger">Alta</span></td></tr>
+                                <tr><td>Costi Fissi</td><td>Costi Fissi/Ricavi</td><td>72,7%</td><td>40-45%</td><td class="text-danger">+30%</td><td>€90K costi eccessivi</td><td><span class="status-badge bg-danger">Alta</span></td></tr>
+                                <tr><td>Cash Flow</td><td>CF Operativo/Ricavi</td><td>-27,14%</td><td>10-15%</td><td class="text-danger">-40%</td><td>€120K liquidità persa</td><td><span class="status-badge bg-danger">Alta</span></td></tr>
+                                <tr><td>Struttura Costi</td><td>Costo Pers./Ricavi</td><td>50,8%</td><td>40-50%</td><td class="text-warning">+3%</td><td>€10K costi extra</td><td><span class="status-badge bg-warning text-dark">Media</span></td></tr>
+                             </tbody>
+                         </table>
+                     </div>
+                  </div>
+             </div>
+
+             <div class="card mb-4 report-section">
+                 <div class="card-header"><h5 class="mb-0">2.2.3 Azioni di Miglioramento Suggerite</h5></div>
+                  <div class="card-body">
+                      <h6 class="mt-4">Tabella 2.8: Piano di Azione Economico (Sintesi - BFLOWS)</h6>
+                      <div class="table-responsive">
+                          <table class="table table-sm table-hover action-table">
+                              <thead class="table-light"><tr><th><i class="fas fa-flag me-1"></i> Area</th><th><i class="fas fa-wrench me-1"></i> Azione Suggerita</th><th><i class="fas fa-chart-line me-1"></i> Effetti Previsti</th><th><i class="fas fa-coins me-1"></i> Net Benefit Stimato</th></tr></thead>
+                              <tbody>
+                                  <tr><td>Struttura Costi</td><td>Revisione costi fissi e variabilizzazione parziale</td><td>Riduzione break-even point</td><td class="text-success">€50K-80K risparmi</td></tr>
+                                  <tr><td>Gestione Crediti</td><td>Implementare factoring pro-soluto e politiche di incasso aggressive</td><td>Riduzione DSO a 120 giorni</td><td class="text-success">€200K liquidità</td></tr>
+                                  <tr><td>Marginalità</td><td>Revisione pricing e ottimizzazione mix servizi</td><td>EBITDA positivo 5-8%</td><td class="text-success">€80K-100K margini</td></tr>
+                                  <tr><td>Cash Flow</td><td>Ottimizzazione capitale circolante e gestione tesoreria</td><td>CF positivo</td><td class="text-success">€150K-200K</td></tr>
+                                  <tr><td>Diversificazione</td><td>Sviluppo servizi ad alto valore aggiunto</td><td>Nuovi flussi di ricavi</td><td class="text-success">+15-20% fatturato</td></tr>
+                                  <tr><td>Controllo Gestione</td><td>Implementazione dashboard KPI e controllo analitico</td><td>Efficienza operativa</td><td class="text-success">ROI 18-24 mesi</td></tr>
+                              </tbody>
+                          </table>
+                      </div>
+                       <p class="small mt-3 text-muted">L'implementazione di queste azioni potrebbe trasformare l'EBITDA da negativo a positivo e migliorare significativamente la generazione di cassa.</p>
+                  </div>
+             </div>
+
+            <div class="card summary-card mb-4 report-section">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-check-circle text-primary me-2"></i>Conclusioni Analisi Economica e Benchmark (BFLOWS)</h5>
+                     <p>BFLOWS S.R.L. si trova in una fase critica ma promettente del proprio sviluppo, caratterizzata da <strong>forte crescita commerciale</strong> (+62,36%) accompagnata da <strong>squilibri economici</strong> che richiedono interventi mirati. La priorità assoluta è il raggiungimento del break-even operativo attraverso l'ottimizzazione della struttura dei costi e il miglioramento dell'efficienza operativa.</p>
+                     <p>Il potenziale di crescita nel settore IT, supportato da una solida struttura patrimoniale e da una liquidità adeguata, offre le basi per una trasformazione positiva dell'azienda. La gestione del capitale circolante, in particolare la riduzione dei tempi di incasso, rappresenta una leva immediata per migliorare la situazione finanziaria.</p>
+                </div>
+            </div>
+
+
+            <!-- ================================================================ -->
+            <!-- FINE CONTENUTO SPECIFICO PARTE 2 -->
+            <!-- ================================================================ -->
+
+        </div> <!-- /dashboard-container -->
+
+        <!-- Footer Standard V2 (Nessuna modifica necessaria) -->
+        <footer class="footer no-print"> <div class="container-fluid px-4"> <div class="row align-items-center"> <div class="col-md-6 text-center text-md-start mb-2 mb-md-0"> SCAN360 © <span id="currentYearFooterReport"></span> </div> <div class="col-md-6 text-center text-md-end"> Powered by <a href="http://www.kitzanos.com" target="_blank" class="text-white fw-bold">Kitzanos Lab</a> <img src="../assets/img/logo_kitzanos.png" alt="Kitzanos Logo" class="ms-2"> </div> </div> </div> </footer>
+
+    </div> <!-- /main-wrapper -->
+
+    <!-- Script JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/charts_config.js"></script>
+    <script src="../js/report_init.js"></script>
+     <script>
+        document.getElementById('currentYearSidebar').textContent = new Date().getFullYear();
+        document.getElementById('currentYearFooterReport').textContent = new Date().getFullYear();
+
+         // Script aggiornamento badge IRP header
+         document.addEventListener('DOMContentLoaded', function() {
+             const irpScoreValue = 57.7; // Updated IRP Value
+             const irpHeaderBadge = document.getElementById('irp-header-badge');
+             if(irpHeaderBadge) {
+                 let badgeClass = 'bg-warning text-dark';
+                 if (irpScoreValue >= 71) badgeClass = 'bg-success'; // Basso
+                 else if (irpScoreValue < 51) badgeClass = 'bg-danger'; // Alto
+                 irpHeaderBadge.className = `badge ${badgeClass} me-3`;
+                 irpHeaderBadge.textContent = `IRP: ${irpScoreValue.toFixed(1)}`;
+             }
+
+              // Ensure logout function is defined
+             if (typeof logout !== 'function') {
+                 window.logout = function() {
+                    console.log("Logout action triggered (placeholder)");
+                }
+             }
+             // Ensure print function is defined
+             if (typeof printDocument !== 'function') {
+                window.printDocument = function() {
+                    window.print();
+                }
+             }
+         });
+   </script>
+<scan-chat data-bot-id="62e05413-c32c-4f33-b2ea-cefa55a601fb"></scan-chat>
+<script src="../js/bundle.js"></script>
+</body>
+</html>
