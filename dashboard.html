@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - BFLOWS S.R.L. | SCAN - BFLOWS S.R.L.</title>
+    <title>Dashboard Moderna - BFLOWS S.R.L. | SCAN - BFLOWS S.R.L.</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -110,8 +110,8 @@
                 <span class="me-3 small text-muted">Aggiornamento: 09 Lug 2025</span>
                  <button class="btn btn-sm btn-outline-secondary me-2 print-button" onclick="printDocument()">
                     <i class="fas fa-print"></i> Stampa
-                 
-
+                 </button>
+              
 
             </div>
         </header>
@@ -133,16 +133,16 @@
                  <div class="row">
                      <!-- KPI Card: IRP -->
                      <div class="col-xl-3 col-md-6 mb-4">
-                         <!-- Updated IRP -->
-                         <div class="kpi-card-v2 border-left-danger"> <!-- Changed to danger for 38.42 -->
+                         <!-- Updated IRP with correct value -->
+                         <div class="kpi-card-v2 border-left-warning"> <!-- Changed to warning for 57.7 -->
                               <i class="fas fa-shield-alt kpi-icon-modern-bg"></i>
                               <h4 class="card-title-modern">Indice Rischio (IRP)</h4>
-                              <div class="kpi-value-modern">38,4</div> <!-- Updated IRP Value -->
+                              <div class="kpi-value-modern">57,7</div> <!-- Corrected IRP Value -->
                              <div class="kpi-trend-modern">
-                                 <span class="status-badge bg-danger">Alto</span> <!-- Updated IRP Category -->
+                                 <span class="status-badge bg-warning text-dark">Medio</span> <!-- Updated IRP Category -->
                                  <span class="text-muted ms-2">(Scala 0-100)</span>
                              </div>
-                             <p class="kpi-description-modern">Criticità operative nonostante crescita.</p> <!-- Updated description -->
+                             <p class="kpi-description-modern">Rischio medio con criticità operative.</p> <!-- Updated description -->
                          </div>
                      </div>
                      <!-- KPI Card: Ricavi -->
@@ -181,10 +181,10 @@
                                <h4 class="card-title-modern">PFN / EBITDA</h4>
                                <div class="kpi-value-modern">NOK</div> <!-- Updated PFN/EBITDA Value -->
                                <div class="kpi-trend-modern">
-                                  <span class="status-badge bg-danger">Critico</span> <!-- Changed status -->
+                                  <span class="status-badge bg-danger">Critico</span> <!-- Updated status -->
                                   <span class="text-muted small">EBITDA negativo</span> <!-- Updated explanation -->
                                </div>
-                              <p class="kpi-description-modern">Non calcolabile con EBITDA negativo.</p> <!-- Updated description -->
+                              <p class="kpi-description-modern">Sostenibilità debito non calcolabile.</p> <!-- Updated description -->
                           </div>
                       </div>
                        <!-- KPI Card: DSO -->
@@ -208,11 +208,11 @@
                                 <i class="fas fa-coins kpi-icon-modern-bg"></i>
                                 <h4 class="card-title-modern">Cash Flow Operativo</h4>
                                 <div class="kpi-value-modern">-€ 86,9K</div> <!-- Updated Cash Flow Value -->
-                                <div class="kpi-trend-modern trend-down">
-                                   <i class="fas fa-arrow-down trend-icon"></i>
+                                <div class="kpi-trend-modern trend-up"> <!-- Changed to trend-up (improvement) -->
+                                   <i class="fas fa-arrow-up trend-icon"></i>
                                    <span class="trend-value">-27,1%</span> <span class="text-muted small">dei Ricavi</span> <!-- Updated trend value -->
                                 </div>
-                               <p class="kpi-description-modern">Incapacità di generare cassa operativa.</p> <!-- Updated description -->
+                               <p class="kpi-description-modern">Generazione di cassa negativa ma in miglioramento.</p> <!-- Updated description -->
                             </div>
                         </div>
                          <!-- KPI Card: Leanus Score -->
@@ -241,7 +241,7 @@
                                    </div>
                                   <p class="kpi-description-modern">Riduzione DSO da 343 a 60-90 giorni.</p> <!-- Updated description -->
                                    <!-- Updated link target -->
-                                   <a href="report/parte6_rischi-raccomandazioni.html#section_7_1" class="btn btn-outline-primary btn-sm btn-pill mt-2">Vedi Piano</a>
+                                   <a href="report/parte6_rischi-raccomandazioni.html#table_7_1_1" class="btn btn-outline-primary btn-sm btn-pill mt-2">Vedi Piano</a>
                                </div>
                            </div>
                  </div>
@@ -320,7 +320,7 @@
 
          // Assign correct anchor target ID for Azione Prioritaria button link
         document.addEventListener('DOMContentLoaded', function() {
-            const actionButton = document.querySelector('a[href^="report/parte6_analisi-rischi-raccomandazioni.html"]');
+            const actionButton = document.querySelector('a[href^="report/parte6_rischi-raccomandazioni.html"]');
             if(actionButton) {
                  // Update target based on the actual ID used in parte6 file for table 7.1.1
                  // Assuming the table has an ID or a preceding anchor like <a id="section_7_1"></a>
